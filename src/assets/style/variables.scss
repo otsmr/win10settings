@@ -1,0 +1,79 @@
+:root {
+
+    --users-primary-color: #0078d4;
+
+    --title-background: #141414;
+
+    --navigation-background: #b1b1b2;
+    --navigation-background-hover: rgba(165, 165, 165, 0.678);
+    --navigation-fluent-light-color: rgba(202, 202, 202, 0.9);
+
+    --page-background: #ffffff;
+    --page-scroll-background: #e6e6e6;
+    --page-scroll--humb: #eee;
+    
+    --page-text: #000;
+    --page-text-mid: #333;
+    --page-text-warn: #e10000;
+
+    --window-border: #b1b1b2;
+    
+    --titlebar-icon: #888;
+    --titlebar-icon-hover: #000;
+
+    --input-border: #555;
+    --input-border-hover: #000;
+
+    --input-background: #fff;
+    --input-active-background: #ddd;
+
+    --input-text: #000;
+    --input-active-text: #000;
+
+    --suggestion-background: #e7e7e7;
+    --suggestion-background-hover: rgba(212, 212, 212, 0.678);
+    --suggestion-fluent-light-color: rgba(255, 255, 255, 0.9);
+
+    --tile-background-hover: #fff;
+    --tile-fluent-light-color: rgba(0,0,0,0.2);
+    --fluent-border-color: rgba(0,0,0,0.1);
+
+    &[theme="dark"] {
+
+        --page-background: #000;
+        --page-scroll-background: #111;
+        --page-scroll-thumb: #222;
+
+        --navigation-background: #1f1f1f;
+        --navigation-background-hover: rgba(57, 57, 57, 0.678);
+        --navigation-fluent-light-color: rgba(78, 78, 78, .9);
+
+        --page-text: #fff;
+        --page-text-mid: #bfbfbf;
+        --page-text-warn: #ee0;
+        
+        --window-border: #222;
+    
+        --titlebar-icon: #888;
+        --titlebar-icon-hover: #fff;
+    
+        --input-border: #6f6f6f;
+        --input-border-hover: #6f6f6f;
+
+        --input-text: #fff;
+        --input-active-text: #000;
+
+        --input-background: #000;
+        --input-active-background: #fff;
+
+        --suggestion-background: rgba(40, 40, 40, 0.726);
+        --suggestion-background-hover: rgba(57, 57, 57, 0.678);
+        --suggestion-fluent-light-color: rgba(78, 78, 78, .9);
+
+        --tile-background-hover: RGBA(3, 3, 3, .5);
+        --tile-fluent-light-color: rgba(255,255,255,0.2);
+        --fluent-border-color: rgba(255,255,255,0.1);
+    
+    }
+
+}

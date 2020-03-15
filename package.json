@@ -1,0 +1,79 @@
+{
+    "name": "win10settings",
+    "version": "0.0.1",
+    "description": "Erweiterte Windows-Einstellungen",
+    "author": "Tobias Müller",
+    "main": "public/electron.js",
+    "homepage": "./",
+    "scripts": {
+        "nodemon": "nodemon --watch public/electron/**/* --watch public/electron.js --exec \"npm run electron\"",
+        "electron": "electron .",
+        "dev": "concurrently \"set BROWSER=none&&npm start\" \"wait-on http://localhost:3000 && npm run nodemon\"",
+        "start": "react-scripts start",
+        "dist": "electron-builder",
+        "build": "react-scripts build && npm run dist"
+    },
+    "build": {
+        "appId": "de.oproj.win10settings",
+        "files": [
+            "build/**/*",
+            "node_modules/**/*"
+        ],
+        "directories": {
+            "buildResources": "assets"
+        },
+        "productName": "Erweiterte Windows-Einstellungen",
+        "copyright": "Copyright (c) 2020 Tobias Müller",
+        "buildVersion": "0.0.1",
+        "win": {
+            "icon": "public/img/logo.png"
+        },
+        "nsis": {
+            "artifactName": "${productName} Setup.${ext}",
+            "uninstallDisplayName": "${productName}",
+            "oneClick": false
+        }
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "dependencies": {
+        "electron-is-dev": "^1.1.0",
+        "nconf": "^0.10.0",
+        "node-fetch": "^2.6.0",
+        "node-notifier": "^6.0.0"
+    },
+    "devDependencies": {
+        "@testing-library/jest-dom": "^4.2.4",
+        "@testing-library/react": "^9.5.0",
+        "@testing-library/user-event": "^7.2.1",
+        "@types/jest": "^24.9.1",
+        "@types/node": "^12.12.29",
+        "@types/react": "^16.9.23",
+        "@types/react-dom": "^16.9.5",
+        "concurrently": "^5.1.0",
+        "electron": "^6.0.3",
+        "electron-builder": "^21.2.0",
+        "markdown": "^0.5.0",
+        "marked-ts": "^1.0.0-beta.5",
+        "node-sass": "^4.13.1",
+        "nodemon": "^2.0.2",
+        "react": "^16.13.0",
+        "react-dom": "^16.13.0",
+        "react-scripts": "3.4.0",
+        "typescript": "^3.7.5",
+        "wait-on": "^4.0.1"
+    }
+}

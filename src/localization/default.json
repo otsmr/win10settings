@@ -1,0 +1,50 @@
+{
+    "LANGUAGE": "Deutsch",
+    "WINDOW_TITLE": "Erweiterte Einstellungen",
+
+    "SETTINGS_TITLE": "Erweiterte Windows-Einstellungen",
+    "SETTINGS_SEARCH_PLACEHOLDER": "Einstellung suchen",
+
+    "S_PRIVACY_TITLE": "Datenschutz",
+    "S_PRIVACY_DESC": "Telemetrie, Windows Defender, Bing-Suche",
+
+    
+    "S_PERSONALIZATION_TITLE": "Personalisierung",
+    "S_PERSONALIZATION_DESC": "Taskleiste-Suchfeld, Tray-Icons",
+    
+    "S_EXPLORER_TITLE": "Explorer",
+    "S_EXPLORER_DESC": "Ordner-Verknüpfungen, Erweiterungen",
+    
+    "S_WINAPPS_TITLE": "Programme",
+    "S_WINAPPS_DESC": "Windows Apps deinstallieren, Office Sicherheit",
+    
+    "S_SSD_TITLE": "SSD schonen",
+    "S_SSD_DESC": "Prefetcher, Energiesparplan, Festplatte ausschaltem",
+    
+    "S_APP_TITLE": "Diese App",
+    "S_APP_DESC": "Update, Design, Sprache, Feedback",
+    
+    "TELEMETRIE": "Telemetrie",
+    "WINDOWS_DEFENDER": "Windows Defender",
+    "SERVICES":  "Dienste",
+    "CORTANA_BING": "Bing-Suche & Cortana",
+    "FIREWALL": "Firewall",
+    "TASKBAR": "Taskleiste",
+    "ADS": "Werbung",
+    "FOLDERSHORTCUTS": "Verknüpfungen",
+    "FOLDEROPTIONS": "Optionen",
+    "WINDOWS_APPS": "Windows Apps",
+    "MS_OFFICE": "Microsoft Office",
+    "RECOMMENDATIONS": "Empfehlungen",
+    "ENERGYSAVER": "Energieoptionen",
+
+    "TOOLS": "Tools",
+    "S_TOOLS_DESC": "Datei Hash mit Rechtsklick, Firewall",
+    "FILE_HASHER": "Datei Hasher",
+
+    "GENERAL": "Allgemein",
+    "UPDATE": "Update",
+    "FEEDBACK": "Feedback",
+    "ABOUT": "Über"
+
+}

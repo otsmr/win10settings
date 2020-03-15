@@ -1,0 +1,25 @@
+.fluent-container
+    position: relative
+    // transition: border-color 150ms
+    outline: 0
+
+    .fluent-content
+        width: calc(100% - 2px)
+        margin: 1px auto
+        position: relative
+        z-index: 1
+
+        &[data-useborder="false"]
+            margin: 0 auto
+            width: 100%
+
+        &.hover
+            margin: 0 auto !important
+            width: 100% !important
+
+        > * 
+            transition: transform 150ms, filter 150ms
+
+        &:active > * 
+            transform: scale(.98)
+            filter: blur(.5px)

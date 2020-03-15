@@ -1,0 +1,54 @@
+
+.startpage .getadmin
+    position: fixed
+    bottom: 50px
+    left: 50%
+    transform: translateX(-50%)
+
+    &[data-isadmin="true"]
+        display: none
+
+.startpage .tiles-container
+    
+    display: grid
+    grid-template-columns: repeat(auto-fill, 250px)
+    justify-content: center
+    grid-gap: 20px
+    width: 95%
+    margin: 40px auto 0
+    max-width: 1200px
+
+    .tile
+        outline: 0
+
+    .tile .content
+        display: flex
+        padding: 8px
+        align-items: center
+        cursor: default
+        
+        h2,
+        p
+            margin: 0
+        
+        .icon
+            padding: 7px 14px 14px
+
+            i
+                font-size: 30px
+                color: var(--users-primary-color)
+
+        h2
+            font-size: 14px
+            margin: 0 0 5px
+            font-weight: normal
+            color: var(--page-text)
+
+        p
+            font-size: 12px
+            color: var(--page-text-mid)
+        
+
+@media ( max-width: 650px )
+    .startpage .tiles-container
+        display: block

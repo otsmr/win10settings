@@ -1,0 +1,19 @@
+.pageWithNav
+    // 325
+    height: 100%
+
+    display: grid
+    grid-template-columns: 325px auto
+
+    .pageContentWithSidebar
+        overflow: auto
+        display: grid
+        grid-template-columns: auto 270px
+
+
+@media (max-width: 1000px) 
+    .pageWithNav .pageContentWithSidebar
+            grid-template-columns: auto 0
+
+            .sidebar
+                display: none

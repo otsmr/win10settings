@@ -1,0 +1,22 @@
+.select-container
+    display: flex
+    align-items: center
+
+    select
+        outline: 0
+        background: var(--page-background)
+        color: var(--page-text)
+        border: 2px solid var(--input-border)
+        padding: 8px
+        margin-top: 10px
+        margin-bottom: 10px
+        padding: 5px 30px 5px 10px
+
+        &:not([disabled]):hover
+            border-color: var(--input-border-hover)
+        
+
+        &[disabled]
+            opacity: .5
+            cursor: not-allowed
+            width: 200px

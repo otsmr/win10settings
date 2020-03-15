@@ -1,0 +1,56 @@
+.navigation
+    height: 100%
+    background: var(--navigation-background)
+
+    > h3
+        margin: 18px
+        color: var(--page-text)
+        font-size: 15px
+        font-weight: normal
+
+    &::after
+
+        content: ""
+        position: absolute
+        top: -30px
+        left: 0
+        width: 325px
+        height: 30px
+        background: var(--navigation-background)
+
+    .search-container
+        width: 90%
+        margin: 0 auto
+        
+    .navigationitems
+        padding: 0
+        list-style: none
+
+        li.active::before
+            content: ""
+            position: absolute
+            height: 20px
+            width: 3px
+            margin-top: 13px
+            background: var(--users-primary-color)
+            z-index: 2
+
+        li .content
+            display: grid
+            grid-template-columns: 50px auto
+            align-items: center
+            padding: 12px 0
+
+            .icon
+                text-align: center
+                color: var(--page-text)
+                display: flex
+
+                i
+                    margin-left: 15px
+                    font-size: 20px
+
+            p
+                margin: 0
+                color: var(--page-text)
+                font-size: 14px

@@ -1,0 +1,154 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+    background: #222;
+}
+a {
+    text-decoration: none;
+}
+.content {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    height: 100%;
+    align-items: center;
+    width: 98%;
+    margin: 0 auto;
+    max-width: 1500px;
+}
+
+header {
+    max-width: 645px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 51px;
+    color: #fff;
+    line-height: 51px;
+    font-weight: bold; 
+    margin: 20px 0;
+}
+
+span {
+    font-size: 13px;
+    color: #464646;
+}
+span a {
+    color: #464646;
+}
+span a:hover {
+    color: #666666;
+}
+p {
+    font-size: 23px;
+    color: #aaa;
+    line-height: 38px;
+    margin: 20px 0;
+}
+
+.content main img {
+    box-shadow: 0 3px 15px rgba(0,0,0,.48);
+    max-width: 645px;
+    width: 90%;
+    margin: 0 auto;
+    display: block;
+}
+.buttons {
+    display: grid;
+    grid-template-columns: min-content min-content;
+    grid-gap: 14px;
+}
+.btn {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 41px max-content;
+    padding: 0 12px 0 4px;
+    background: #fff;
+    height: 52px;
+    transition: 150ms;
+}
+.btn:hover {
+    transform: scale(1.01);
+}
+.btn:focus {
+    transform: scale(0.99);
+}
+.btn img {
+    margin: 0 auto;
+}
+.btn.blue {
+    background: #0078D4;
+}
+.btn.blue span{
+    color: #fff;
+}
+
+.btn span {
+    font-size: 16px;
+    color: #000;
+}
+
+@media (max-width: 1800px) {
+    h1 {
+        font-size: 38px;
+        line-height: 43px;
+        margin: 10px 0;
+    }
+    p {
+        font-size: 21px;
+        line-height: 33px;
+    }
+    .content main img {
+        box-shadow: 0 3px 15px rgba(0,0,0,.48);
+        max-width: 500px;
+        width: 90%;
+    }
+}
+
+@media (max-width: 1200px) {
+
+    header {
+        margin: 70px auto 60px;
+    }
+
+    .content {
+        grid-template-columns: 100%;
+        text-align: center;
+    }
+
+    .buttons {
+        grid-template-columns: auto auto;
+        justify-items: center;
+
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    header {
+        margin: 70px auto 60px;
+    }
+
+    .content {
+        grid-template-columns: 100%;
+        text-align: center;
+    }
+
+    .buttons {
+        grid-template-columns: auto;
+
+    }
+    
+}

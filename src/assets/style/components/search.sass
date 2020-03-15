@@ -1,0 +1,65 @@
+.search
+    position: relative
+
+    .input
+        position: relative
+
+        .icon
+            position: absolute
+            right: 7px
+            top: 3px
+            color: var(--page-text-mid)
+            font-size: 20px
+            cursor: default
+            transform: rotateZ(90deg)
+
+            i
+                font-size: 16px
+
+    .input input
+        width: 100%
+        padding: 4px 30px 4px 9px
+        border: 2px solid var(--input-border)
+        transition: 100ms
+        background: var(--input-background)
+        color: var(--input-text)
+        font-size: 15px
+
+        &:hover
+            border-color: var(--input-border-hover)
+
+        &:active,
+        &:focus
+            border-color: var(--input-border-hover)
+            background: var(--input-active-background)
+            color: var(--input-active-text)
+
+    .suggestion
+        position: absolute
+        width: 100%
+        background: var(--suggestion-background)
+        box-shadow: 0 3px 13px -4px rgba(0, 0, 0, 0.6)
+        border: 1px solid var(--input-border)
+        z-index: 100
+
+        ul
+            list-style: none
+            padding: 0
+            margin: 0
+
+            .content
+                display: flex
+                align-items: center
+                padding: 10px 0
+
+                .icon 
+                    padding: 0 9px 0 14px
+                    display: flex
+
+                i
+                    font-size: 15px
+                    color: var(--page-text)
+
+                span
+                    font-size: 15px
+                    color: var(--page-text)
