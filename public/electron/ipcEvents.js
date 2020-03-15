@@ -1,6 +1,5 @@
 
 const { app, shell } = require("electron");
-const isDev = require("electron-is-dev");
 
 const socket = require("./utils/socket");
 const appconfig = require("./utils/appconfig");
@@ -52,7 +51,7 @@ module.exports = (window) => {
     .on("restartAsAdmin", () => {
         
         let path = "";
-        if (!isDev)  path = `'${__dirname}/../../'`
+        if (process.isDev)  path = `'${__dirname}/../../'`
         
         powershell.runAsAdmin(`${app.getPath("exe")} ${path} ${process.argv.slice(2).concat([
             // '--relaunchAsAdmin',
