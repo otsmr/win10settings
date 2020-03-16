@@ -30,7 +30,7 @@
 # Features
 
 * Mehr **Datenschutz für Windows 10**
-* **Datenschutzniveau** nach dem **BSI-Standard**
+* **Datenschutzniveau** nach **BSI-Empfehlung**
 * **Werbung** in Windows 10 **deaktivieren**
 * Einstellungen um die **SSD zu schonen** 
 * Windows-**Apps** mit **einem Klick entfernen**
