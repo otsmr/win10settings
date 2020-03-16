@@ -53,11 +53,7 @@ mode con: cols=80 lines=9
 set File=%1
 set Algorithm=%2
 
-for /r %%f in (%File%) do (
-    set FileName=%%~nxf
-)
-
-title %Algorithm%-Hash von "%FileName%
+title %Algorithm%-Hash
 echo Hash wird berechnet...
 
 powershell "Get-FileHash -LiteralPath '%File%' -Algorithm %Algorithm% | Format-List"
@@ -83,13 +79,13 @@ let befehl2 = `
 Set-ItemProperty '${escaped}' -Name MUIVerb -Type String -Value 'Datei Hash erzeugen mit' -Force;
 Set-ItemProperty '${escaped}' -Name SubCommands -Type String -Value '' -Force;
 Set-ItemProperty '${escaped}\\shell\\01SubCmd' -Name 'MUIVerb' -Type String -Value 'SHA1' -Force;
-Set-Item '${escaped}\\shell\\01SubCmd\\command' -Force -Type String -Value '"${appDataPath}\\filehasher.bat" "%1" "SHA1"';
+Set-Item '${escaped}\\shell\\01SubCmd\\command' -Force -Type String -Value '${appDataPath}\\filehasher.bat "%1" SHA1';
 Set-ItemProperty '${escaped}\\shell\\02SubCmd' -Name 'MUIVerb' -Type String -Value 'SHA256' -Force;
-Set-Item '${escaped}\\shell\\02SubCmd\\command' -Force -Type String -Value '"${appDataPath}\\filehasher.bat" "%1" "SHA256"';
+Set-Item '${escaped}\\shell\\02SubCmd\\command' -Force -Type String -Value '${appDataPath}\\filehasher.bat "%1" SHA256';
 Set-ItemProperty '${escaped}\\shell\\04SubCmd' -Name 'MUIVerb' -Type String -Value 'SHA512' -Force;
-Set-Item '${escaped}\\shell\\04SubCmd\\command' -Force -Type String -Value '"${appDataPath}\\filehasher.bat" "%1" "SHA512"';
+Set-Item '${escaped}\\shell\\04SubCmd\\command' -Force -Type String -Value '${appDataPath}\\filehasher.bat "%1" SHA512';
 Set-ItemProperty '${escaped}\\shell\\05SubCmd' -Name 'MUIVerb' -Type String -Value 'MD5' -Force;
-Set-Item '${escaped}\\shell\\05SubCmd\\command' -Force -Type String -Value '"${appDataPath}\\filehasher.bat" "%1" "MD5"';`
+Set-Item '${escaped}\\shell\\05SubCmd\\command' -Force -Type String -Value '${appDataPath}\\filehasher.bat "%1" MD5';`
 
         //BUGFIX: Ich weiß nicht warum, aber so geht es am schnellsten...
         powershell.runAsync(befehl, () => {

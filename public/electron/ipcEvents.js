@@ -1,6 +1,6 @@
 
 const { app, shell } = require("electron");
-
+const path = require("path");
 const socket = require("./utils/socket");
 const appconfig = require("./utils/appconfig");
 const powershell = require("./utils/powershell");
@@ -50,13 +50,10 @@ module.exports = (window) => {
 
     .on("restartAsAdmin", () => {
         
-        let path = "";
-        if (process.isDev)  path = `'${__dirname}/../../'`
+        let modulePath = "";
+        if (process.isDev)  modulePath = `"${path.join(__dirname, "/../..")}",`;
         
-        powershell.runAsAdmin(`${app.getPath("exe")} ${path} ${process.argv.slice(2).concat([
-            // '--relaunchAsAdmin',
-            `--userData '${process.userData}'`
-        ]).join(" ")}`); 
+        powershell.runSync(`Start-Process -FilePath '${app.getPath("exe")}' -Verb runAs -ArgumentList ${modulePath} "--userData", "${process.userData}"`); 
 
         app.exit(0);
 

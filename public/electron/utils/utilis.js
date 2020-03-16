@@ -4,24 +4,25 @@ const fetch = require('node-fetch');
 const notifier = require('node-notifier');
 
 
-
 const checkFolder = exports.checkFolder = (dir) => {
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+    try {
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+    } catch (error) {
+    }
 }
 
 exports.setUserDataFolder = () => {
 
     process.userData = app.getPath("userData");
 
-    process.argv.forEach((item, i) => {
-        if (item === "--userData") process.userData = process.argv[i + 1];
-    });
-
     checkFolder(process.userData);
-
     process.userData += "\\userData";
 
     checkFolder(process.userData);
+
+    process.argv.forEach((item, i) => {
+        if (item === "--userData") process.userData = process.argv[i + 1];
+    });
 
 }
 
