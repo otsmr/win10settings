@@ -75,6 +75,9 @@ npm run dev
 
 # ToDo
 
+## Windows Update auf Version 2004
+* Die Websuche kann für Home und Pro jetzt nur noch über die Firewall ausgeschaltet werden, nicht mehr über die Registry
+
 ## Sprachen
 
 ## Datenschutz
