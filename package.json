@@ -53,7 +53,8 @@
         "electron-is-dev": "^1.1.0",
         "nconf": "^0.10.0",
         "node-fetch": "^2.6.0",
-        "node-notifier": "^6.0.0"
+        "node-notifier": "^6.0.0",
+        "node-powershell": "^4.0.0"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^4.2.4",
