@@ -24,6 +24,7 @@ export default class extends React.Component{
                 <p> Vor jedem Verbindungsaufbau zum Telemetrie-Backend von Microsoft erfolgt zunächst die Auflösung des DNS-Namens des Telemetrie-Backend-Hosts in dessen zugehörige IP-Adresse. Windows Betriebssysteme versuchen DNS-Namen über Einträge in der lokalen Hosts-Datei aufzulösen, bevor sie einen DNS-Server abfragen. Diesen Umstand kann man sich zunutze machen, um allen bekannten Hostnamen von Telemetrie-Endpunkten von Microsoft die IP-Adresse 0.0.0.0 zuzuordnen. Da die IP-Adresse 0.0.0.0 nicht routing-fähig ist, zeigen die dieser Adresse zugeordneten DNS-Namen „ins Leere“, und können damit nicht erreicht werden. Dementsprechend können die dort aufgelisteten Telemetrie-Backend-Hosts nicht erreicht werden. </p>
                 <label>Domains über die Hosts-Datei blockieren<sup> 2, 3</sup></label>
                 <Toggle configID="privacy:telemetrie:blockDomainsWithHosts" offText="Aus" onText="An" />
+                <p className="note">Um zu verhindern, dass Windows Defender diese Einstellung zurücksetzt, wird die "hosts"-Datei auf die Ausschlussliste <sup>7</sup> gesetzt <sup>8</sup>.</p>
 
 
                 <h2>Feedbackhäufigkeit</h2>

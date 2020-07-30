@@ -22,6 +22,7 @@ export default class extends React.Component{
                 <label>Domains über die Hosts-Datei blockieren</label>
                 <Toggle configID="privacy:cortana:blockDomainsWithHosts" offText="Aus" onText="An" />
                 <p className="note">Diese Option blockiert den Zugriff auf bing.com in allen Programmen.</p>
+                <p className="note">Um zu verhindern, dass Windows Defender diese Einstellung zurücksetzt, wird die "hosts"-Datei auf die Ausschlussliste <sup>3</sup> gesetzt <sup>4</sup>.</p>
 
 
                 <h2>MSN deaktivieren</h2>

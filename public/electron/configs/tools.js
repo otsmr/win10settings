@@ -31,7 +31,7 @@ const getEscapedPath = () => {
 
 configs.get["filehasher:enabled"] = (callBack) => {
     
-    powershell.runAsync(`Test-Path '${getHKCU()}\\Software\\Classes\\\`*\\shell\\DateiHash'`, (err, res) => {
+    powershell.run(`Test-Path '${getHKCU()}\\Software\\Classes\\\`*\\shell\\DateiHash'`, (err, res) => {
 
         callBack(false, (res.replace("\r\n", "") === "True") ? true : false);
     
@@ -88,12 +88,12 @@ Set-ItemProperty '${escaped}\\shell\\05SubCmd' -Name 'MUIVerb' -Type String -Val
 Set-Item '${escaped}\\shell\\05SubCmd\\command' -Force -Type String -Value '${appDataPath}\\filehasher.bat "%1" MD5';`
 
         //BUGFIX: Ich weiß nicht warum, aber so geht es am schnellsten...
-        powershell.runAsync(befehl, () => {
+        powershell.run(befehl, () => {
 
             befehl2 = befehl2.replace(/\n/g, "").split(";");
 
             befehl2.forEach(element => {
-                powershell.runSync(element);
+                powershell.run(element);
             });
 
             configs.get["filehasher:enabled"](callBack);
@@ -102,7 +102,7 @@ Set-Item '${escaped}\\shell\\05SubCmd\\command' -Force -Type String -Value '${ap
 
     } else {
 
-        powershell.runSync(`Remove-Item -Path '${escaped}' -Force -Recurse`);
+        powershell.run(`Remove-Item -Path '${escaped}' -Force -Recurse`);
         try {
             fs.unlinkSync(appDataPath + "/filehasher.bat");
         } catch (error) {}
@@ -231,12 +231,12 @@ Set-Item '${pathShell}' -Type String -Value 'Firewall: Anwendungen hier blockier
 Set-Item '${pathShell}\\command' -Force -Type String -Value '"${appDataPath}\\blockfolder.bat" "%1"';`
 
         //BUGFIX: Ich weiß nicht warum, aber so geht es am schnellsten...
-        powershell.runAsync(befehl, () => {
+        powershell.run(befehl, () => {
 
             befehl2 = befehl2.replace(/\n/g, "").split(";");
 
             befehl2.forEach(element => {
-                powershell.runSync(element);
+                powershell.run(element);
             });
 
             configs.get["firewall:enabled"](callBack);
@@ -245,7 +245,7 @@ Set-Item '${pathShell}\\command' -Force -Type String -Value '"${appDataPath}\\bl
 
     } else {
 
-        powershell.runSync(`Remove-Item -Path '${pathShell}' -Force -Recurse`);
+        powershell.run(`Remove-Item -Path '${pathShell}' -Force -Recurse`);
         try {
             fs.unlinkSync(appDataPath + "/blockfolder.bat");
         } catch (error) {}

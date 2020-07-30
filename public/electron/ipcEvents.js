@@ -34,10 +34,10 @@ module.exports = (window) => {
     socket
 
     .on("restartWinExplorer", () => {
-        powershell.runAsync("taskkill /IM explorer.exe /f; explorer.exe;", () => {});
+        powershell.run("taskkill /IM explorer.exe /f; Start-Process explorer.exe;");
     })
     .on("openMSConfig", () => {
-        powershell.runSync("msconfig");
+        powershell.run("msconfig");
     })
     .on("openUrl", shell.openExternal)
     .on("openLogFolder", ()=>{
@@ -53,9 +53,9 @@ module.exports = (window) => {
         let modulePath = "";
         if (process.isDev)  modulePath = `"${path.join(__dirname, "/../..")}",`;
         
-        powershell.runSync(`Start-Process -FilePath '${app.getPath("exe")}' -Verb runAs -ArgumentList ${modulePath} "--userData", "${process.userData}"`); 
-
-        app.exit(0);
+        powershell.run(`Start-Process -FilePath '${app.getPath("exe")}' -Verb runAs -ArgumentList ${modulePath} "--userData", "${process.userData}"`, () => {
+            app.exit(0);
+        });
 
     }) 
     

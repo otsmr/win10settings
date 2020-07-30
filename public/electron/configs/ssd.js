@@ -12,7 +12,7 @@ const configs = {
 
 configs.get["energysaver:getSSDInfos"] = (callBack) => {
 
-    powershell.getJSONAsync(`Get-PhysicalDisk -UniqueID (Get-Disk | Where-Object {$_.IsBoot -eq $true} | % {$_.UniqueId})`,[
+    powershell.getJson(`Get-PhysicalDisk -UniqueID (Get-Disk | Where-Object {$_.IsBoot -eq $true} | % {$_.UniqueId})`,[
         "UniqueId",
         "FriendlyName",
         "MediaType"
@@ -31,7 +31,7 @@ configs.get["energysaver:getSSDInfos"] = (callBack) => {
 
 configs.get["energysaver:hibernate"] = (callBack) => {
 
-    powershell.getJSONAsync(`Get-ItemProperty -Path HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Power`, [
+    powershell.getJson(`Get-ItemProperty -Path HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Power`, [
         "HibernateEnabled"
     ], (err, json) => {
         if (err) return callBack(err, json);
@@ -42,8 +42,9 @@ configs.get["energysaver:hibernate"] = (callBack) => {
 }
 configs.set["energysaver:hibernate"] = (value, callBack) => {
 
-    powershell.runAsAdmin(`powercfg -h ${(value) ? "off" : "on"}`);
-    configs.get["energysaver:hibernate"](callBack);
+    powershell.runAsAdmin(`powercfg -h ${(value) ? "off" : "on"}`, () => {
+        configs.get["energysaver:hibernate"](callBack);
+    });
 
 }
 
@@ -53,7 +54,7 @@ configs.set["energysaver:hibernate"] = (value, callBack) => {
 
 configs.get["energysaver:restingState"] = (callBack) => {
 
-    powershell.runAsync(`powercfg /list`, (err, res) => {
+    powershell.run(`powercfg /list`, (err, res) => {
         if (err) return callBack(err, res);
 
         res = res.split("\r\n");
@@ -73,14 +74,14 @@ configs.set["energysaver:restingState"] = (value, callBack) => {
 
     if (value) {
 
-        return powershell.runAsync(`powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c`, (err, res) => {
+        return powershell.run(`powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c`, (err, res) => {
             if (err) return callBack(err, res);
             configs.get["energysaver:restingState"](callBack);
         })
 
     }
 
-    powershell.runAsync(`Show-ControlPanelItem -CanonicalName Microsoft.PowerOptions`, ()=>{})
+    powershell.run(`Show-ControlPanelItem -CanonicalName Microsoft.PowerOptions`);
     callBack(true, "Einstellung muss manuell zurückgesetzt werden");
 }
 
@@ -92,7 +93,7 @@ const prefertcherPath = "'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Man
 
 configs.get["energysaver:prefetcher"] = (callBack) => {
 
-    powershell.getJSONAsync(`Get-ItemProperty ${prefertcherPath}`, [
+    powershell.getJson(`Get-ItemProperty ${prefertcherPath}`, [
         "EnablePrefetcher",
         "EnableSuperfetch"
     ], (err, json) => {
@@ -114,9 +115,10 @@ configs.set["energysaver:prefetcher"] = (value, callBack) => {
 
     powershell.runAsAdmin(
 `Set-ItemProperty ${prefertcherPath} -Name EnablePrefetcher -Value ${value} -Force;
-Set-ItemProperty ${prefertcherPath} -Name EnableSuperfetch -Value ${value} -Force;`)
-
+Set-ItemProperty ${prefertcherPath} -Name EnableSuperfetch -Value ${value} -Force;`, () => {
     configs.get["energysaver:prefetcher"](callBack);
+})
+
 
 }
 
@@ -126,7 +128,7 @@ Set-ItemProperty ${prefertcherPath} -Name EnableSuperfetch -Value ${value} -Forc
 
 configs.get["energysaver:trim"] = (callBack) => {
 
-    powershell.runAsync(`fsutil behavior query DisableDeleteNotify`, (err, res) => {
+    powershell.run(`fsutil behavior query DisableDeleteNotify`, (err, res) => {
         if (err) return callBack(err, res);
 
         res = res.split("\r\n");
@@ -137,9 +139,9 @@ configs.get["energysaver:trim"] = (callBack) => {
 }
 configs.set["energysaver:trim"] = (value, callBack) => {
 
-    powershell.runAsAdmin(`fsutil behavior set DisableDeleteNotify ${(value) ? "0" : "1"}`);
-
-    configs.get["energysaver:trim"](callBack);
+    powershell.runAsAdmin(`fsutil behavior set DisableDeleteNotify ${(value) ? "0" : "1"}`, () => {
+        configs.get["energysaver:trim"](callBack);
+    });
 
 }
 

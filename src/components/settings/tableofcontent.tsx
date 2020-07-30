@@ -40,7 +40,9 @@ const content = [
                             3. <A href="https://docs.microsoft.com/de-de/windows/privacy/configure-windows-diagnostic-data-in-your-organization">Microsoft Docs</A><br />
                             4. <A href="https://docs.microsoft.com/de-de/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#1816-feedback-und-diagnose1816-feedback--diagnostics">Microsoft Docs (18.16)</A><br />
                             5. <A href="https://docs.microsoft.com/de-de/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#bkmk-general">Microsoft Docs (18.1)</A><br />                 
-                            6. <A href="https://www.der-windows-papst.de/2015/12/24/windows-10-spy-deaktivieren/">Jörn Walter</A><br />                 
+                            6. <A href="https://www.der-windows-papst.de/2015/12/24/windows-10-spy-deaktivieren/">Jörn Walter</A><br />
+                            7. <A href="https://support.microsoft.com/de-de/help/4028485/windows-10-add-an-exclusion-to-windows-security">Microsoft Docs ("Add an exclusion to Windows Security")</A><br />
+                            8. <A href="https://support.microsoft.com/en-us/help/2764944/hosts-file-is-detected-as-malware-in-windows-defender">Microsoft Docs ("Hosts file is detected as malware in Windows Defender")</A>
                         </p>
                     </div>
                 )
@@ -82,7 +84,9 @@ const content = [
                         <h1>Quellenangaben</h1>
                         <p>
                             1. <A href="https://www.heise.de/newsticker/meldung/Windows-10-Version-1803-Microsoft-aendert-Abschalten-der-Web-Suche-4015544.html">Heise Online</A><br />
-                            2. <A href="https://www.csoonline.com/article/2641599/microsoft-hosts-file-bypass-issue.html">MS HOSTS file bypass issue</A>
+                            2. <A href="https://www.csoonline.com/article/2641599/microsoft-hosts-file-bypass-issue.html">MS HOSTS file bypass issue</A><br />
+                            3. <A href="https://support.microsoft.com/de-de/help/4028485/windows-10-add-an-exclusion-to-windows-security">Microsoft Docs ("Add an exclusion to Windows Security")</A><br />
+                            4. <A href="https://support.microsoft.com/en-us/help/2764944/hosts-file-is-detected-as-malware-in-windows-defender">Microsoft Docs ("Hosts file is detected as malware in Windows Defender")</A>
                         </p>
                     </div>
                 )

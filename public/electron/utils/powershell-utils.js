@@ -4,6 +4,26 @@ const { checkFolder } = require("./utilis");
 
 const powershell = require("./powershell");
 
+exports.checkForHostsFileInMSDefender = (call) => {
+
+    powershell.getJson("Get-MpPreference", [
+        "ExclusionPath"
+    ], (err, output) => {
+
+        try {
+            
+            if (output.ExclusionPath.indexOf("C:\\Windows\\System32\\drivers\\etc\\hosts") > -1) {
+                return call(false);
+            }
+
+        } catch (error) { }
+
+        powershell.runAsAdmin(`Add-MpPreference -ExclusionPath 'C:\\Windows\\System32\\drivers\\etc\\hosts'`, call);
+
+    })
+
+}
+
 exports.getManifestFromAppx = (app, isDarkMode = false) => {
     
     try {
@@ -60,7 +80,7 @@ exports.getManifestFromAppx = (app, isDarkMode = false) => {
 
 exports.getUsersThemeMode = (callBack) => {
 
-    powershell.getJSONAsync(`Get-ItemProperty -Path "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"`, [
+    powershell.getJson(`Get-ItemProperty -Path "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"`, [
         "AppsUseLightTheme"
     ], (err, jsonIsDarkMode) => {
 
@@ -77,7 +97,7 @@ exports.getUsersThemeMode = (callBack) => {
 
 exports.getCurrentUsers = (callBack) => {
 
-    powershell.getJSONAsync(`$userAccount = new-object System.Security.Principal.NTAccount($env:UserName);$userAccount.Translate([System.Security.Principal.SecurityIdentifier])`,[
+    powershell.getJson(`$userAccount = new-object System.Security.Principal.NTAccount($env:UserName);$userAccount.Translate([System.Security.Principal.SecurityIdentifier])`,[
         "Value"
     ], (err, json) => {
         if (err) return callBack(true, json);
@@ -108,7 +128,7 @@ exports.saveIconFromExe = (exe, name) => {
 
 exports.runningAsAdministrator = (callBack) => {
 
-    powershell.runAsync(`([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)`, (err, res) => {
+    powershell.run(`([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)`, (err, res) => {
 
         let isAdmin = false;
         if (res.replace("\r\n", "") !== "False") isAdmin = true;
@@ -128,7 +148,7 @@ exports.Service = class {
 
     status (callBack) {
 
-        powershell.getJSONAsync(`Get-Service -Name "${this.name}"`, [
+        powershell.getJson(`Get-Service -Name "${this.name}"`, [
             "Name",
             "DisplayName",
             "Status",

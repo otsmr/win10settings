@@ -17,7 +17,7 @@ const getHKCU = () => {
 
 configs.get["taskbar:showTrayIcons"] = (callBack) => {
 
-    powershell.getJSONAsync(`get-itemproperty '${getHKCU()}\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\'`, [
+    powershell.getJson(`get-itemproperty '${getHKCU()}\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\'`, [
         "EnableAutoTray",
     ], (err, json) => {
         if (err) return callBack(true, json);
@@ -29,7 +29,7 @@ configs.set["taskbar:showTrayIcons"] = (value, callBack) => {
 
     const path = `${getHKCU()}\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\`;
 
-    powershell.runAsync(`Set-ItemProperty -Path '${path}' -Name EnableAutoTray -Value ${(value) ? "0" : "1"}`, (err, json) => {
+    powershell.run(`Set-ItemProperty -Path '${path}' -Name EnableAutoTray -Value ${(value) ? "0" : "1"}`, (err, json) => {
         if (err) return callBack(true, json);
         configs.get["taskbar:showTrayIcons"](callBack);
     });
@@ -43,7 +43,7 @@ configs.set["taskbar:showTrayIcons"] = (value, callBack) => {
 
 configs.get["taskbar:searchboxTaskbarMode"] = (callBack) => {
 
-    powershell.getJSONAsync(`get-itemproperty '${getHKCU()}\\Software\\Microsoft\\Windows\\CurrentVersion\\Search'`, [
+    powershell.getJson(`get-itemproperty '${getHKCU()}\\Software\\Microsoft\\Windows\\CurrentVersion\\Search'`, [
         "SearchboxTaskbarMode",
     ], (err, json) => {
         if (err) return callBack(true, json);
@@ -55,7 +55,7 @@ configs.set["taskbar:searchboxTaskbarMode"] = (value, callBack) => {
 
     const path = `${getHKCU()}\\Software\\Microsoft\\Windows\\CurrentVersion\\Search`;
 
-    powershell.runAsync(`Set-ItemProperty -Path '${path}' -Name SearchboxTaskbarMode -Value ${(value) ? "0" : "2"}`, (err, json) => {
+    powershell.run(`Set-ItemProperty -Path '${path}' -Name SearchboxTaskbarMode -Value ${(value) ? "0" : "2"}`, (err, json) => {
         if (err) return callBack(true, json);
         configs.get["taskbar:searchboxTaskbarMode"](callBack);
     });

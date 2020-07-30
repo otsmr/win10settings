@@ -37,7 +37,8 @@ const appconfig = require("./electron/utils/appconfig");
 const ipcEvents = require("./electron/ipcEvents");
 const {
     getCurrentUsers,
-    runningAsAdministrator
+    runningAsAdministrator,
+    checkForHostsFileInMSDefender
 } = require("./electron/utils/powershell-utils");
 
 
@@ -77,8 +78,9 @@ app.on('ready', () => {
 
     const win = process.mainWindow = new BrowserWindow({
         ...options,
-        show: false,
+        show: true,
         frame: false,
+        backgroundColor: "#000",
         title: 'Erweiterte Einstellungen',
         webPreferences: {
             nodeIntegration: false,

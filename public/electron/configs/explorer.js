@@ -61,9 +61,12 @@ const items = [
 
 configs.get["shortcuts:thispc"] = (callBack) => {
 
-    powershell.getJSONAsync(`Get-ChildItem -Path '${EPATHS[0]}'`, [
+    powershell.getJson(`Get-ChildItem -Path '${EPATHS[0]}'`, [
         "PSChildName"
     ], (err, json) => {
+
+        console.log(json);
+
         if (err) return callBack(err, json);
 
         json = json.map(e => e.PSChildName);
@@ -106,10 +109,10 @@ configs.set["shortcuts:thispc"] = (values, callBack) => {
 
     }
 
-    powershell.runAsAdmin(befehl);
+    powershell.runAsAdmin(befehl, () => {
+        configs.get["shortcuts:thispc"](callBack);
+    });
     
-    configs.get["shortcuts:thispc"](callBack);
-
 }
 
 
@@ -119,19 +122,20 @@ let programFoldersIDs = []
 
 configs.get["shortcuts:programFolders"] = (callBack) => {
 
-    powershell.getJSONAsync(`
+    powershell.getJson(`
 $items = (gci "${getHKCU()}\\Software\\Classes\\CLSID"  -ea SilentlyContinue | % { if((get-itemproperty -Path $_.PsPath) -match "IsPinnedToNameSpaceTree") { $_.PsPath} });
 $return = @();
 foreach ($path in $items) {
-
-    $item = get-itemproperty -Path $path | Select-Object -Property 'System.IsPinnedToNameSpaceTree', '(default)';
-    $icon = get-itemproperty (Get-ChildItem $path | Select-Object -Property * | where {($_.Name -like "*DefaultIcon*")} | % {$_.PsPath}) | Select-Object -Property '(default)';
-    $return += [pscustomobject] @{
-        title = $item | % {$_."(default)"};
-        checked = $item | % {$_."System.IsPinnedToNameSpaceTree"};
-        icon = $icon | % {$_."(default)"};
-        path = $path;
-    }
+    try {
+        $item = get-itemproperty -Path $path | Select-Object -Property 'System.IsPinnedToNameSpaceTree', '(default)';
+        $icon = get-itemproperty (Get-ChildItem $path | Select-Object -Property * | where {($_.Name -like "*DefaultIcon*")} | % {$_.PsPath}) | Select-Object -Property '(default)';
+        $return += [pscustomobject] @{
+            title = $item | % {$_."(default)"};
+            checked = $item | % {$_."System.IsPinnedToNameSpaceTree"};
+            icon = $icon | % {$_."(default)"};
+            path = $path;
+        }
+    } catch {}
 
 }; $return`, [
         "title",
@@ -172,8 +176,6 @@ foreach ($path in $items) {
 }
 configs.set["shortcuts:programFolders"] = (values, callBack) => {
 
-    console.log(values, programFoldersIDs);
-
     const path = programFoldersIDs[values.id];
     const value = (values.value) ? "1" : "0";
 
@@ -191,7 +193,7 @@ configs.set["shortcuts:programFolders"] = (values, callBack) => {
 
 configs.get["folderoptions:fileextensions"] = (callBack) => {
 
-    powershell.getJSONAsync(`get-itemproperty '${getHKCU()}\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced'`, [
+    powershell.getJson(`get-itemproperty '${getHKCU()}\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced'`, [
         "HideFileExt",
     ], (err, json) => {
         if (err) return callBack(true, json);
@@ -203,7 +205,7 @@ configs.set["folderoptions:fileextensions"] = (value, callBack) => {
 
     const path = `${getHKCU()}\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced`;
 
-    powershell.runAsync(`Set-ItemProperty -Path '${path}' -Name HideFileExt -Value ${(value) ? "0" : "1"}`, (err, json) => {
+    powershell.run(`Set-ItemProperty -Path '${path}' -Name HideFileExt -Value ${(value) ? "0" : "1"}`, (err, json) => {
         if (err) return callBack(true, json);
         configs.get["folderoptions:fileextensions"](callBack);
     });
@@ -217,7 +219,7 @@ configs.set["folderoptions:fileextensions"] = (value, callBack) => {
 
 configs.get["folderoptions:openwith"] = (callBack) => {
 
-    powershell.getJSONAsync(`get-itemproperty '${getHKCU()}\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced'`, [
+    powershell.getJson(`get-itemproperty '${getHKCU()}\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced'`, [
         "LaunchTo",
     ], (err, json) => {
         if (err) return callBack(true, json);
@@ -229,7 +231,7 @@ configs.set["folderoptions:openwith"] = (value, callBack) => {
 
     const path = `${getHKCU()}\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced`;
 
-    powershell.runAsync(`Set-ItemProperty -Path '${path}' -Name LaunchTo -Value ${(value) ? "1" : "2"}`, (err, json) => {
+    powershell.run(`Set-ItemProperty -Path '${path}' -Name LaunchTo -Value ${(value) ? "1" : "2"}`, (err, json) => {
         if (err) return callBack(true, json);
         configs.get["folderoptions:openwith"](callBack);
     });

@@ -25,7 +25,7 @@ const loadWinApps = (isDarkMode, callBack) => {
     const ignoreAppxByTitle = appconfig.get("configs:programs:winapps:ignoreAppxByTitle");
 
 
-    powershell.getJSONAsync(`Get-AppxPackage -User '${sid}'`, [
+    powershell.getJson(`Get-AppxPackage -User '${sid}'`, [
         "Name",
         "PackageFullName",
         "InstallLocation"
@@ -104,7 +104,7 @@ configs.set["winapps:appliste"] = (listForRemove, callBack) => {
         befehl += `Remove-AppxPackage -Package (Get-AppxPackage -Name '${appID}' | % {$_.PackageFullName}) -User '${sid}';`
     });
 
-    powershell.runAsync(befehl, () => {
+    powershell.run(befehl, () => {
         configs.get["winapps:appliste"](callBack);
     })
 

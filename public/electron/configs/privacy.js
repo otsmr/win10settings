@@ -2,7 +2,7 @@ const { app } = require("electron");
 const fs = require("fs");
 
 const powershell = require("../utils/powershell");
-const { Service } = require("../utils/powershell-utils");
+const { Service, checkForHostsFileInMSDefender } = require("../utils/powershell-utils");
 const appconfig = require("../utils/appconfig");
 
 const HOSTS_PATH = "C:\\Windows\\System32\\drivers\\etc\\hosts";
@@ -21,7 +21,7 @@ const getHKCU = () => {
 
 configs.get["telemetrie:allowtelemetry"] = (callBack) => {
 
-    powershell.getJSONAsync(`get-itemproperty HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection`, [
+    powershell.getJson(`get-itemproperty HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection`, [
         "AllowTelemetry"
     ], (err, json) => {
         if (err) return callBack(err, json);
@@ -35,9 +35,9 @@ configs.set["telemetrie:allowtelemetry"] = (value, callBack) => {
 
     const newValue = (value) ? "0" : "1";
 
-    powershell.runAsAdmin(`set-itemproperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection' -Name AllowTelemetry -Value '${newValue}' -Force`);
-
-    configs.get["telemetrie:allowtelemetry"](callBack);
+    powershell.runAsAdmin(`set-itemproperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection' -Name AllowTelemetry -Value '${newValue}' -Force`, () => {
+        configs.get["telemetrie:allowtelemetry"](callBack);
+    });
 
 }
 
@@ -47,11 +47,12 @@ configs.set["telemetrie:allowtelemetry"] = (value, callBack) => {
 
 configs.get["telemetrie:requestFeedback"] = (callBack) => {
 
-    powershell.getJSONAsync(`get-itemproperty -Path ${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules`, [
+    powershell.getJson(`get-itemproperty -Path ${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules`, [
         "NumberOfSIUFInPeriod",
         "PeriodInNanoSeconds",
     ], (err, json) => {
-        if (err) return callBack(err, json);
+
+        if (err) return callBack(false, false);
 
         callBack(false, (
             json["NumberOfSIUFInPeriod"] === 0 &&
@@ -63,20 +64,20 @@ configs.get["telemetrie:requestFeedback"] = (callBack) => {
 }
 configs.set["telemetrie:requestFeedback"] = (value, callBack) => {
 
+    let command = `
+Remove-itemproperty -Path '${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules' -Name NumberOfSIUFInPeriod -Force;
+Remove-itemproperty -Path '${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules' -Name PeriodInNanoSeconds -Force;`
+
     
     if (value) {
-        powershell.runSync(`
+        command = `
 Set-ItemProperty -Path '${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules' -Name NumberOfSIUFInPeriod -Value '0' -Force -Type DWord;
-Set-ItemProperty -Path '${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules' -Name PeriodInNanoSeconds -Value '0' -Force -Type DWord`
-        );
-    } else {
-        powershell.runSync(`
-Remove-itemproperty -Path '${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules' -Name NumberOfSIUFInPeriod -Force;
-Remove-itemproperty -Path '${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules' -Name PeriodInNanoSeconds -Force
-        `);
+Set-ItemProperty -Path '${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules' -Name PeriodInNanoSeconds -Value '0' -Force -Type DWord;`;
     }
-
-    configs.get["telemetrie:requestFeedback"](callBack);
+    
+    powershell.run(command, () => {
+        configs.get["telemetrie:requestFeedback"](callBack);
+    });
 
 }
 
@@ -150,18 +151,26 @@ configs.set["telemetrie:blockDomainsWithHosts"] = (value, callBack) => {
 
         }
 
-        const tmpPath = app.getPath("temp") + "\\" + parseInt(String(Math.random()).replace(".", "")) + ".hosts.txt";
+        checkForHostsFileInMSDefender(()=> {
 
-        fs.writeFile(tmpPath, newValue, () => {
-
-            powershell.runAsAdmin(`Copy-Item -Path '${tmpPath}' -Destination '${HOSTS_PATH}' -Force`);
+            const tmpPath = app.getPath("temp") + "\\" + parseInt(String(Math.random()).replace(".", "")) + ".hosts.txt";
     
-            setTimeout(() => { // BugFix: Ergebniss hat manchmal nicht gestimmt
-                fs.unlinkSync(tmpPath);
-                return configs.get["telemetrie:blockDomainsWithHosts"](callBack);
-            }, 500);
-
+            fs.writeFile(tmpPath, newValue, () => {
+    
+                powershell.runAsAdmin(`Copy-Item -Path '${tmpPath}' -Destination '${HOSTS_PATH}' -Force`, () => {
+    
+                    setTimeout(() => { // BugFix: Ergebniss hat manchmal nicht gestimmt
+                        fs.unlinkSync(tmpPath);
+                        return configs.get["telemetrie:blockDomainsWithHosts"](callBack);
+                    }, 500);
+    
+                });
+        
+    
+            });
+            
         });
+
 
     });
 
@@ -182,7 +191,7 @@ configs.get["telemetrie:basicPrivacySettings"] = (callBack) => {
         4: Windows erlauben, das Starten von Apps nachzuverfolgen, um Start und Suchergebnisse zu verbessern        
     */
     
-    powershell.getJSONAsync(`get-itemproperty -LiteralPath @(
+    powershell.getJson(`get-itemproperty -LiteralPath @(
     'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo',
     'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\AdvertisingInfo',
     '${getHKCU()}\\Control Panel\\International\\User Profile',
@@ -226,10 +235,10 @@ New-Item -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows' -Name Advertising
 set-itemproperty -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\AdvertisingInfo' -Name DisabledByGroupPolicy -Value '1'  -Type 'DWord' -Force;
 set-itemproperty -Path '${getHKCU()}\\Control Panel\\International\\User Profile' -Name HttpAcceptLanguageOptOut -Value '1' -Type 'DWord' -Force;
 set-itemproperty -Path '${getHKCU()}\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced' -Name Start_TrackProgs -Value '0' -Type 'DWord' -Force;
-        `);
+        `, () => {
+            configs.get["telemetrie:basicPrivacySettings"](callBack);
+        });
     
-        configs.get["telemetrie:basicPrivacySettings"](callBack);
-
     } else {
 
         callBack(true, "Diese Einstellungen müssen manuell zurückgesetzt werden.");
@@ -286,7 +295,7 @@ for (const service of services) {
 
 configs.get["defender:mapsreporting"] = (callBack) => {
 
-    powershell.getJSONAsync("Get-MpPreference", ["MAPSReporting"], (err, res) => {
+    powershell.getJson("Get-MpPreference", ["MAPSReporting"], (err, res) => {
         if (err) return callBack(err, res);
 
         callBack(false, res.MAPSReporting === 0);
@@ -298,9 +307,9 @@ configs.set["defender:mapsreporting"] = (value, callBack) => {
 
     const newValue = (value) ? 0 : 1;
 
-    powershell.runAsAdmin(`Set-MpPreference -MAPSReporting ${newValue}`);
-
-    configs.get["defender:mapsreporting"](callBack);
+    powershell.runAsAdmin(`Set-MpPreference -MAPSReporting ${newValue}`, () => {
+        configs.get["defender:mapsreporting"](callBack);
+    });
 
 }
 
@@ -312,7 +321,7 @@ configs.set["defender:mapsreporting"] = (value, callBack) => {
 
 configs.get["defender:submitsamplesconsent"] = (callBack) => {
 
-    powershell.getJSONAsync("Get-MpPreference", ["SubmitSamplesConsent"], (err, res) => {
+    powershell.getJson("Get-MpPreference", ["SubmitSamplesConsent"], (err, res) => {
         if (err) return callBack(err, res);
 
         callBack(false, res.SubmitSamplesConsent === 0);
@@ -324,9 +333,9 @@ configs.set["defender:submitsamplesconsent"] = (value, callBack) => {
 
     const newValue = (value) ? 0 : 1;
 
-    powershell.runAsAdmin(`Set-MpPreference -SubmitSamplesConsent ${newValue}`);
-
-    configs.get["defender:submitsamplesconsent"](callBack);
+    powershell.runAsAdmin(`Set-MpPreference -SubmitSamplesConsent ${newValue}`, () => {
+        configs.get["defender:submitsamplesconsent"](callBack);
+    });
 
 }
 
@@ -341,7 +350,7 @@ configs.get["cortana:websearch"] = (callBack) => {
 
     const CORTANA_PATH = `${getHKCU()}\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search`
 
-    powershell.getJSONAsync(`get-itemproperty ${CORTANA_PATH}`, [
+    powershell.getJson(`get-itemproperty ${CORTANA_PATH}`, [
         "BingSearchEnabled",
         "AllowSearchToUseLocation",
         "CortanaConsent"
@@ -363,13 +372,13 @@ configs.set["cortana:websearch"] = (value, callBack) => {
 
     value = (value) ? "0" : "1";
 
-    powershell.runSync(`
+    powershell.run(`
         set-itemproperty -Path '${CORTANA_PATH}' -Name BingSearchEnabled -Value '${value}' -Type 'DWord' -Force;
         set-itemproperty -Path '${CORTANA_PATH}' -Name AllowSearchToUseLocation -Value '${value}' -Type 'DWord' -Force;
         set-itemproperty -Path '${CORTANA_PATH}' -Name CortanaConsent -Value '${value}' -Type 'DWord' -Force;
-    `);
-
-    configs.get["cortana:websearch"](callBack);
+    `, () => {
+        configs.get["cortana:websearch"](callBack);
+    });
 
 }
 
@@ -426,12 +435,13 @@ configs.set["cortana:blockDomainsWithHosts"] = (value, callBack) => {
             
             powershell.runAsAdmin(`
             Copy-Item -Path '${tmpPath}' -Destination '${HOSTS_PATH}' -Force
-            `);
+            `, () => {
+                setTimeout(() => { // BugFix: Ergebniss hat manchmal nicht gestimmt
+                    fs.unlinkSync(tmpPath);
+                    return configs.get["cortana:blockDomainsWithHosts"](callBack);
+                }, 500);
+            });
             
-            setTimeout(() => { // BugFix: Ergebniss hat manchmal nicht gestimmt
-                fs.unlinkSync(tmpPath);
-                return configs.get["cortana:blockDomainsWithHosts"](callBack);
-            }, 500);
             
         });
         
@@ -490,7 +500,7 @@ configs.get["ads:displayAds"] = (callBack) => {
 
         const item = disableAdsKeys[count];
 
-        powershell.getJSONAsync(`Get-ItemProperty -Path ${item.path}`, Object.keys(item.items), (err, json) => {
+        powershell.getJson(`Get-ItemProperty -Path ${item.path}`, Object.keys(item.items), (err, json) => {
             if (err) return callBack(true, json);
 
             for (const key in item.items) {
@@ -539,7 +549,7 @@ if (Test-Path '${item.path}') {
 
     befehl = befehl.replace(/\n/g, " ");
 
-    powershell.runAsync(befehl, (err, result) => {
+    powershell.run(befehl, (err, result) => {
         if (err) return callBack(true, result);
 
         configs.get["ads:displayAds"](callBack);
