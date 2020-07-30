@@ -7,7 +7,8 @@
 <h3 align="center">Erweiterte Windows-Einstellungen</h3>
 
 <p align="center">
-    Erweiterte Windows-Einstellungen ist eine <b>Sammlung von Einstellungen</b>, die der Benutzer nicht oder nur auf sehr umständliche Weise über die Benutzeroberfläche ändern kann. Einstellungen, die nicht in der offiziellen Dokumentation von Microsoft enthalten sind, werden zunächst erläutert und sind mit einer <b>Quellenangabe</b> versehen.
+    Erweiterte Windows-Einstellungen ist eine Sammlung von <b>nützlichen<br> und datenschutzfreundlichen</b> Einstellungen für Windows.<br>
+    Einstellungen, die nicht in der offiziellen Dokumentation von<br>Microsoft enthalten sind, werden zunächst erläutert und<br><b>sind mit einer Quellenangabe versehen</b>. 
     <br><br>
     --- <a href="https://win10settings.oproj.de/"><strong>Webseite </strong></a> ---
     <a href="#download"><strong>Download</strong></a> ---
@@ -72,11 +73,6 @@ npm run dev
 | `/src` | Das Frontend der App in React und Typescript. |
 | `/src/localization` | Sprachdateien |
 | `/webpage` | Statische Webseite |
-
-# ToDo
-
-## Windows Update auf Version 2004
-* Die Websuche kann für Home und Pro jetzt nur noch über die Firewall ausgeschaltet werden, nicht mehr über die Registry
 
 ## Sprachen
 
