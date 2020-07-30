@@ -11,6 +11,7 @@ const {
 const log = require("./logs");
 
 
+
 module.exports = new class {
 
     runAsAdmin (befehl) {

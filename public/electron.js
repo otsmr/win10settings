@@ -65,10 +65,19 @@ app.on('web-contents-created', (event, contents) => {
 
 app.on('ready', () => {
 
-    const window = process.mainWindow = new BrowserWindow({
+    const winBounds = appconfig.get("winBounds");
+
+    let options = {
         width: 1300,
-        height: 810,
-        show: true,
+        height: 811
+    }
+    if (winBounds !== undefined) {
+        options = { ...options, ...winBounds}
+    }
+
+    const win = process.mainWindow = new BrowserWindow({
+        ...options,
+        show: false,
         frame: false,
         title: 'Erweiterte Einstellungen',
         webPreferences: {
@@ -80,20 +89,26 @@ app.on('ready', () => {
         }
     });
 
-    ipcEvents(window);
+    ipcEvents(win);
 
-    window.setMenu(null);
+    win.setMenu(null);
 
+    win.on("close", () => {
+        appconfig.set("winBounds", win.getBounds());
+    })
+
+    win.on("ready-to-show", () => {
+        win.show();
+    })
 
     runningAsAdministrator((err, isAdmin) => {
 
         process.isAdmin = isAdmin;
 
-
         // Wenn der normale Benutzer keine Administratorrechte hat wird das Programm
         // beim öffnen mit Adminrechten unter einem anderen Benutzer ausgeführt
 
-        if (isAdmin) return loadURL(window);
+        if (isAdmin) return loadURL(win);
 
         getCurrentUsers((err, items) => {
 
@@ -102,7 +117,7 @@ app.on('ready', () => {
                 appconfig.set("CURRENT_USER_SID", items.sid);
             }
 
-            loadURL(window);
+            loadURL(win);
 
         });
 
