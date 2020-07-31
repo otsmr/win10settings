@@ -87,6 +87,7 @@ Set-ItemProperty -Path '${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules' -Name Pe
 configs.get["telemetrie:blockDomainsWithHosts"] = (callBack) => {
 
     fs.readFile(HOSTS_PATH, (err, buffer) => {
+        if (err) return;
         const file = buffer.toString();
         callBack(false, (
             file.indexOf("# Microsoft Telemetriedomain") > -1 && 
@@ -168,7 +169,7 @@ configs.set["telemetrie:blockDomainsWithHosts"] = (value, callBack) => {
         
     
             });
-            
+
         });
 
 
@@ -390,8 +391,8 @@ configs.set["cortana:websearch"] = (value, callBack) => {
 configs.get["cortana:blockDomainsWithHosts"] = (callBack) => {
     
     fs.readFile(HOSTS_PATH, (err, buffer) => {
+        if (err) return;
         const file = buffer.toString();
-        
         callBack(false, (
             file.indexOf("# Bing deaktiviert") > -1 && 
             file.indexOf("# End of Bing deaktiviert") > -1
