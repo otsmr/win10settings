@@ -1,6 +1,6 @@
 {
     "name": "win10settings",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Erweiterte Windows-Einstellungen",
     "author": "Tobias Müller",
     "main": "public/electron.js",
@@ -24,7 +24,7 @@
         },
         "productName": "Erweiterte Windows-Einstellungen",
         "copyright": "Copyright (c) 2020 Tobias Müller",
-        "buildVersion": "0.0.1",
+        "buildVersion": "0.0.2",
         "win": {
             "icon": "public/img/logo.png"
         },
