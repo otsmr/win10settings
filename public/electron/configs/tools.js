@@ -118,7 +118,7 @@ Set-Item '${escaped}\\shell\\05SubCmd\\command' -Force -Type String -Value '${ap
 
 configs.get["firewall:enabled"] = (callBack) => {
     
-    powershell.runAsync(`Test-Path '${getHKCU()}\\Software\\Classes\\Directory\\shell\\Firewall'`, (err, res) => {
+    powershell.run(`Test-Path '${getHKCU()}\\Software\\Classes\\Directory\\shell\\Firewall'`, (err, res) => {
 
         callBack(false, (res.replace("\r\n", "") === "True") ? true : false);
     
