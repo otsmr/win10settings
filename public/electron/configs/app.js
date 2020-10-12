@@ -38,6 +38,18 @@ configs.set["gereral:themeMode"] = (value, callBack) => {
     configs.get["gereral:themeMode"](callBack);
 }
 
+// ------------------------------------------------------------------
+
+
+configs.get["gereral:language"] = (callBack) => {
+    callBack(false, appconfig.get("app:language"));
+}
+configs.set["gereral:language"] = (value, callBack) => {
+    appconfig.set("app:language", value);
+    socket.emit("changeLanguage", false, value);
+    configs.get["gereral:language"](callBack);
+}
+
 
 // ------------------------------------------------------------------
 

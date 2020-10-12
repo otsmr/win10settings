@@ -1,0 +1,50 @@
+{
+    "LANGUAGE": "English",
+    "WINDOW_TITLE": "Advanced Windows Settings",
+
+    "SETTINGS_TITLE": "Advanced Windows Settings",
+    "SETTINGS_SEARCH_PLACEHOLDER": "Find a setting",
+
+    "S_PRIVACY_TITLE": "Privacy",
+    "S_PRIVACY_DESC": "Telemetry, Microsoft Defender, Micrososft Bing Search",
+
+    
+    "S_PERSONALIZATION_TITLE": "Personalization",
+    "S_PERSONALIZATION_DESC": "Taskbar search bar, Tray icons",
+    
+    "S_EXPLORER_TITLE": "Windows Explorer",
+    "S_EXPLORER_DESC": "Folder shortcuts, Extensions",
+    
+    "S_WINAPPS_TITLE": "Programs",
+    "S_WINAPPS_DESC": "Uninstall Windows Apps, Office Security",
+    
+    "S_SSD_TITLE": "SSD Settings",
+    "S_SSD_DESC": "Prefetch, Energy plan, Make hard disk go offline",
+    
+    "S_APP_TITLE": "This app",
+    "S_APP_DESC": "Updates, Design, Language, Feedback",
+    
+    "TELEMETRIE": "Telemetry",
+    "WINDOWS_DEFENDER": "Microsoft Defender",
+    "SERVICES":  "Services",
+    "CORTANA_BING": "Bing Search & Cortana",
+    "FIREWALL": "Firewall",
+    "TASKBAR": "Taskbar",
+    "ADS": "Advertising",
+    "FOLDERSHORTCUTS": "Links",
+    "FOLDEROPTIONS": "Options",
+    "WINDOWS_APPS": "Windows Apps",
+    "MS_OFFICE": "Microsoft Office",
+    "RECOMMENDATIONS": "Recommendations",
+    "ENERGYSAVER": "Energy saver",
+
+    "TOOLS": "Tools",
+    "S_TOOLS_DESC": "File hash on context menu, Firewall",
+    "FILE_HASHER": "File Hasher",
+
+    "GENERAL": "General",
+    "UPDATE": "Update",
+    "FEEDBACK": "Feedback",
+    "ABOUT": "About"
+
+}

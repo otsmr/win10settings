@@ -3,7 +3,8 @@
         "automaticallyCheckForUpdates": false
     },
     "app": {
-        "themeMode": "system"
+        "themeMode": "system",
+        "language": "de_DE"
     },
     "HKEY_CURRENT_USER": "HKCU:",
     "CURRENT_USER_SID": "",

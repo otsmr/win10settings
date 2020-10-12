@@ -8,7 +8,10 @@ import Startpage from "./startpage";
 import PageWithNav from "./pagewithnav";
 import Titlebar from "../titlebar";
 
-import DefaultLocalization from "../../localization/default.json"
+import DefaultLocalization from "../../localization/de_DE.json"
+
+import de_DE from "../../localization/de_DE.json"
+import en_US from "../../localization/en_US.json"
 
 import Translate from "../../utilitis/translate"
 import TableOfContent from "./tableofcontent";
@@ -20,10 +23,7 @@ const T = new Translate({}, {})
 interface IProps {}
 
 interface IState {
-    languages: {
-        title: string,
-        code: string
-    }[],
+    languageCode: string,
     activePageID: string;
 }
 
@@ -35,11 +35,15 @@ export default class extends React.Component<IProps, IState> {
         super(prop)
 
         this.state = {
-            languages: [{title: "Deutsch", code: "de"}],
+            languageCode: "de_DE",
             activePageID: "startpage"
         }
-
-        T.setLocalizationData({}, DefaultLocalization);
+        
+        socket.emit("getConfig", "app:gereral:language", this.updateLanguage);
+        socket.on("changeLanguage", this.updateLanguage);
+        
+        let languageCode: string = localStorage.getItem("languageCode") || "de_DE";
+        this.updateLanguage(false, languageCode);
 
         this.tableOfContent = new TableOfContent(T);
 
@@ -47,6 +51,27 @@ export default class extends React.Component<IProps, IState> {
         socket.emit("loadThemeMode", this.setThemeMode);
 
     }
+
+    updateLanguage = (err: boolean, newLanguageCode: string) => {
+        if (err) return;
+
+        let languageCode: string = localStorage.getItem("languageCode") || "de_DE";
+
+        if (languageCode !== newLanguageCode) {
+            localStorage.setItem("languageCode", newLanguageCode);
+            (window as any).location.reload();
+            return;
+        }
+
+        let languageData = {};
+        switch (languageCode) {
+            case "de_DE": languageData = de_DE; break;
+            case "en_US": languageData = en_US; break;
+        }
+        T.setLocalizationData(languageData, DefaultLocalization);
+
+    }
+
 
     setThemeMode = (value: string) => {
 
