@@ -5,10 +5,11 @@ export default {
         const rand = parseInt(String(Math.random()).split(".")[1]);
 
         let func:any = ()=>{};
-        if (typeof a === "function") func = a;
-        if (typeof b === "function") func = b;
-        if (typeof c === "function") func = c;
-        if (typeof d === "function") func = d;
+        if (typeof a === "function") {func = a; a = null;};
+        if (typeof b === "function") {func = b; b = null;};
+        if (typeof c === "function") {func = c; c = null;};
+        if (typeof d === "function") {func = d; d = null;};
+
 
         (window as any).ipcRenderer.send(id, rand, a, b, c, d);
         (window as any).ipcRenderer.on(id + rand, (event: any, a: any, b: any, c: any, d: any) => {

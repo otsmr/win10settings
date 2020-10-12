@@ -29,16 +29,16 @@ export default class extends React.Component<IProps, IState > {
 
     }
 
-    onChange = (itemID: any, value: boolean) => {
+    onChange = (itemID: string, value: boolean) => {
 
-        const itemType = itemID.split(":")[0];
+        const itemType: string = itemID.split(":")[0];
 
         const configID = "explorer:shortcuts:" + itemType;
         const id = itemID.split(":")[1];
 
         socket.emit("setConfig", configID, {
             id, value
-        }, (itemType == "thispc") ? this.setThisPCItems : this.setProgramFolders);
+        }, (itemType === "thispc") ? this.setThisPCItems : this.setProgramFolders);
         
     }
 
