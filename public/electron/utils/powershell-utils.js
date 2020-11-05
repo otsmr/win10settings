@@ -4,6 +4,28 @@ const { checkFolder } = require("./utilis");
 
 const powershell = require("./powershell");
 
+exports.checkRegPathRecursive = (regpath, callBack) => {
+
+    const regpathSplited = regpath.split("\\");
+
+    function checkSinglePath (i) {
+
+        if (!regpathSplited[i-1]) return callBack();
+
+        const path = regpathSplited.slice(0, i).join("\\");
+        
+        powershell.run(`if ((Test-Path '${path}') -eq $false) { New-Item '${path}'; }`, (err, result) => {
+            if (err) return callBack(true, result);
+
+            checkSinglePath(i+1);
+        })
+
+    }
+
+    checkSinglePath(2);
+    
+}
+
 exports.checkForHostsFileInMSDefender = (call) => {
 
     powershell.getJson("Get-MpPreference", [

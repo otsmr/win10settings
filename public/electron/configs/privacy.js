@@ -2,7 +2,7 @@ const { app } = require("electron");
 const fs = require("fs");
 
 const powershell = require("../utils/powershell");
-const { Service, checkForHostsFileInMSDefender } = require("../utils/powershell-utils");
+const { Service, checkForHostsFileInMSDefender, checkRegPathRecursive } = require("../utils/powershell-utils");
 const appconfig = require("../utils/appconfig");
 
 const HOSTS_PATH = "C:\\Windows\\System32\\drivers\\etc\\hosts";
@@ -45,28 +45,34 @@ configs.set["telemetrie:allowtelemetry"] = (value, callBack) => {
 // ------------------------------------------------------------------
 
 
+const SIUF_RULES_PATH = `${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules`;
+
 configs.get["telemetrie:requestFeedback"] = (callBack) => {
 
-    powershell.getJson(`get-itemproperty -Path ${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules`, [
-        "NumberOfSIUFInPeriod",
-        "PeriodInNanoSeconds",
-    ], (err, json) => {
+    checkRegPathRecursive(SIUF_RULES_PATH, () => {
 
-        if (err) return callBack(false, false);
-
-        callBack(false, (
-            json["NumberOfSIUFInPeriod"] === 0 &&
-            json["PeriodInNanoSeconds"] === 0
-        ));
+        powershell.getJson(`get-itemproperty -Path '${SIUF_RULES_PATH}'`, [
+            "NumberOfSIUFInPeriod",
+            "PeriodInNanoSeconds",
+        ], (err, json) => {
     
+            if (err) return callBack(false, false);
+    
+            callBack(false, (
+                json["NumberOfSIUFInPeriod"] === 0 &&
+                json["PeriodInNanoSeconds"] === 0
+            ));
+        
+        });
+
     });
 
 }
 configs.set["telemetrie:requestFeedback"] = (value, callBack) => {
 
     let command = `
-Remove-itemproperty -Path '${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules' -Name NumberOfSIUFInPeriod -Force;
-Remove-itemproperty -Path '${getHKCU()}\\Software\\Microsoft\\Siuf\\Rules' -Name PeriodInNanoSeconds -Force;`
+Remove-itemproperty -Path '${SIUF_RULES_PATH}' -Name NumberOfSIUFInPeriod -Force;
+Remove-itemproperty -Path '${SIUF_RULES_PATH}' -Name PeriodInNanoSeconds -Force;`
 
     
     if (value) {
