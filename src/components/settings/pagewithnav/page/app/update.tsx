@@ -1,11 +1,14 @@
 
 import React from "react"
-import { Marked } from 'marked-ts';
+import Markdown from 'markdown-it';
 
 import Toggle from '../../../forms/toggle'
 import A from "../../../forms/a"
 
 import socket from "../../../../../utilitis/socket";
+
+
+const md = new Markdown();
 
 interface IProps {}
 interface IState {
@@ -73,7 +76,7 @@ export default class extends React.Component<IProps, IState> {
                         <p>Zur Zeit gibt es keine Aktualisierungen.</p>
                         <br />
                         <label>Diese Version enthält die folgenden Änderungen:</label>
-                        <div className="changelog" dangerouslySetInnerHTML={{__html: Marked.parse(this.state.changelog)}}></div>
+                        <div className="changelog" dangerouslySetInnerHTML={{__html: md.render(this.state.changelog)}}></div>
                     </div>
                 ) : (
                     <div>
@@ -81,7 +84,7 @@ export default class extends React.Component<IProps, IState> {
                         <A href={this.state.downloadURL}><button className="btn">Herunterladen</button></A>
                         <br /><br />
                         <label>Die neue Version enthält die folgenden Änderungen:</label>
-                        <div className="changelog" dangerouslySetInnerHTML={{__html: Marked.parse(this.state.changelog)}}></div>
+                        <div className="changelog" dangerouslySetInnerHTML={{__html: md.render(this.state.changelog)}}></div>
                     </div>
                 )}
                 

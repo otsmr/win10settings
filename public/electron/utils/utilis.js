@@ -1,7 +1,7 @@
 const fs = require("fs");
 const { app } = require("electron");
 const fetch = require('node-fetch');
-const notifier = require('node-notifier');
+// const notifier = require('node-notifier');
 
 
 const checkFolder = exports.checkFolder = (dir) => {
@@ -42,11 +42,13 @@ exports.checkForUpdates = () => {
 
         if ("v" + app.getVersion() < newVersion) {
 
-            notifier.notify({
-                title: "Update verfügbar",
-                message: `Ein Update für Erweiterte Windows Einstellungen auf Version ${newVersion} ist verfügbar!`,
-                icon: __dirname + "/../../img/logo.png"
-            })
+            //TODO: write own notification system
+
+            // notifier.notify({
+            //     title: "Update verfügbar",
+            //     message: `Ein Update für Erweiterte Windows Einstellungen auf Version ${newVersion} ist verfügbar!`,
+            //     icon: __dirname + "/../../img/logo.png"
+            // })
 
         }
         
