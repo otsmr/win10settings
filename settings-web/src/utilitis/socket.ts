@@ -1,4 +1,8 @@
+
+const apiUrl = "http://127.0.0.1:13253";
+
 export default {
+
 
     emit (id: string, a: any = null, b: any = null, c: any = null, d: any = null) {
 
@@ -11,14 +15,19 @@ export default {
         if (typeof d === "function") {func = d; d = null;};
 
 
-        (window as any).ipcRenderer.send(id, rand, a, b, c, d);
-        (window as any).ipcRenderer.on(id + rand, (event: any, a: any, b: any, c: any, d: any) => {
-            func(a, b, c, d);
-        });
+        // (window as any).ipcRenderer.send(id, rand, a, b, c, d);
+        // (window as any).ipcRenderer.on(id + rand, (event: any, a: any, b: any, c: any, d: any) => {
+        //     func(a, b, c, d);
+        // });
+
+        console.log("TODO::", "POST", a?.toString(), b?.toString(), c?.toString(), d?.toString());
 
     },
 
     on (id: string, call: Function) {
+
+        console.log("TODO::", "LISTENER", id, call.toString());
+        return;
 
         (window as any).ipcRenderer.on(id, (event: any, rand: any, a: any, b: any, c: any, d: any) => {
             if (a === null) call((a: any, b: any, c: any, d: any) => { event.reply(id+rand, a,b,c,d); });

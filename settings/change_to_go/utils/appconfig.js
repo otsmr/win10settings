@@ -3,7 +3,7 @@ const nconf = require("nconf");
 const fs = require("fs");
 
 const log = require("./logs");
-const defaultConfigs = require("./../../config.json");
+const defaultConfigs = require("../../config.json");
 
 module.exports = new class {
 
