@@ -1,1 +1,0 @@
-Forked from [neutralinojs](https://github.com/neutralinojs/neutralinojs).
