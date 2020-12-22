@@ -53,7 +53,7 @@
         "electron-is-dev": "^1.2.0",
         "nconf": "^0.10.0",
         "node-fetch": "^2.6.1",
-        "node-notifier": "^6.0.0",
+        "node-notifier": "^8.0.1",
         "node-powershell": "^4.0.0"
     },
     "devDependencies": {
