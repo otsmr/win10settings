@@ -1,77 +1,41 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"math/rand"
-	"net"
+	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
-	"strings"
-	"time"
+	"sync"
 
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"github.com/webview/webview"
 )
 
 type Settings struct {
-	Port int
+	Port     int
+	LogLevel string
 }
 
-func generate_random_token(length int) string {
-
-	rand.Seed(time.Now().Unix())
-
-	charSet := "abcdefghijklmnopqrstuvwxyz0123456789"
-	var output strings.Builder
-	for i := 0; i < length; i++ {
-		random := rand.Intn(len(charSet))
-		randomChar := charSet[random]
-		output.WriteString(string(randomChar))
-	}
-
-	return output.String()
-
+func log(msg string) {
+	// TODO:
 }
 
-func get_settings() Settings {
+func start_webview(settings Settings, wg *sync.WaitGroup) {
 
-	settings := Settings{}
+	defer wg.Done()
 
-	data, err := ioutil.ReadFile("./settings.json")
-	if err != nil {
-		fmt.Println("error:", err)
-		return settings
+	url := "http://localhost:" + strconv.Itoa(settings.Port)
+
+	fmt.Println("[webview] open " + url)
+
+	showLog := false
+	if settings.LogLevel == "verbose" {
+		showLog = true
 	}
 
-	err = json.Unmarshal(data, &settings)
-	if err != nil {
-		fmt.Println("error:", err)
-	}
-
-	return settings
-
-}
-
-func is_port_available(port int) bool {
-
-	ln, err := net.Listen("tcp", ":"+strconv.Itoa(port))
-
-	if err != nil {
-		return false
-	}
-
-	ln.Close()
-
-	return true
-}
-
-func start_webview(port int) {
-
-	isdev := true
-
-	url := "http://localhost:" + strconv.Itoa(port)
-
-	w := webview.New(isdev)
+	w := webview.New(showLog)
 	defer w.Destroy()
 
 	w.SetTitle("Erweiterte Windows-Einstellungen")
@@ -82,21 +46,39 @@ func start_webview(port int) {
 
 }
 
+func start_httpserver(port int, wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+
+	r.Mount("/api", apiRouter())
+
+	workDir, _ := os.Getwd()
+	filesDir := http.Dir(filepath.Join(workDir, "app"))
+	FileServer(r, "/app", filesDir)
+
+	fmt.Println("[http server] listen to http://127.0.0.1:" + strconv.Itoa(port))
+	http.ListenAndServe("127.0.0.1:"+strconv.Itoa(port), r)
+
+}
+
 func main() {
 
 	settings := get_settings()
 	auth_token := generate_random_token(30)
 
-	for settings.Port < settings.Port+100 {
-
-		if is_port_available(settings.Port) {
-			break
-		}
-		settings.Port++
-
-	}
-
 	fmt.Println(auth_token)
-	// start_webview(settings.Port)
+
+	settings.Port = get_next_free_port(settings.Port)
+
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go start_httpserver(settings.Port, &wg)
+	go start_webview(settings, &wg)
+
+	wg.Wait()
 
 }
