@@ -6,7 +6,7 @@ import A from "./forms/a"
 import search from "../../utilitis/search"
 import socket from '../../utilitis/socket';
 
-const BSI_BERICHT_LINK = "https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Cyber-Sicherheit/SiSyPHus/Analyse_Telemetriekomponente.pdf?__blob=publicationFile&v=5";
+const BSI_BERICHT_LINK = "https://web.archive.org/web/20190911091237/https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Cyber-Sicherheit/SiSyPHus/Analyse_Telemetriekomponente.pdf?__blob=publicationFile&v=5";
 
 function BSIInfo () {
     return (
