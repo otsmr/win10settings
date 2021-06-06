@@ -3,7 +3,7 @@ import React from "react";
 import Toggle from '../../../forms/toggle';
 import A from "./../../../forms/a"
 
-const BSI_BERICHT_LINK = "https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Cyber-Sicherheit/SiSyPHus/Analyse_Telemetriekomponente.pdf?__blob=publicationFile&v=5";
+const BSI_BERICHT_LINK = "https://web.archive.org/web/20190911091237/https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Cyber-Sicherheit/SiSyPHus/Analyse_Telemetriekomponente.pdf?__blob=publicationFile&v=5";
 
 export default class extends React.Component{
 
