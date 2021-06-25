@@ -1,0 +1,44 @@
+{
+    "name": "win10settings",
+    "version": "0.0.2",
+    "description": "Erweiterte Windows-Einstellungen",
+    "author": "Tobias Müller",
+    "main": "",
+    "homepage": "https://win10settings.oproj.de",
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build"
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@testing-library/jest-dom": "^5.14.1",
+        "@testing-library/react": "^12.0.0",
+        "@testing-library/user-event": "^13.1.9",
+        "@types/jest": "^26.0.23",
+        "@types/markdown-it": "^12.0.2",
+        "@types/node": "^15.12.4",
+        "@types/react": "^17.0.11",
+        "@types/react-dom": "^17.0.8",
+        "js-sha256": "^0.9.0",
+        "markdown-it": "^12.0.6",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "react-scripts": "^4.0.3",
+        "sass": "^1.35.1",
+        "typescript": "^4.3.4"
+    }
+}

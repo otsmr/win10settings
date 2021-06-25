@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://tsmr.eu">
-    <img src="public/img/logo-dark.png" width="150">
+    <img src="frontend/public/img/logo-dark.png" width="150">
   </a>
 </p>
 
