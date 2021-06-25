@@ -1,17 +1,26 @@
-#![deny(warnings)]
+// #![deny(warnings)]
+
+
+// pub mod settings;
+
+use std::env;
+use std::path::PathBuf;
 
 use bytes::Buf;
-use std::env;
-use hex;
 use regex::Regex;
+
 use tokio::fs::File;
-use std::path::PathBuf;
 use tokio_util::codec::{BytesCodec, FramedRead};
 use hyper::service::{make_service_fn, service_fn};
 use hyper::{header, Body, Method, Request, Response, Server, StatusCode};
+
 use sha2::Sha256;
 use hmac::{Hmac, Mac, NewMac};
 use base64;
+use hex;
+
+use crate::settings;
+
 
 type GenericError = Box<dyn std::error::Error + Send + Sync>;
 type Result<T> = std::result::Result<T, GenericError>;
@@ -46,8 +55,6 @@ async fn api_post_response(req: Request<Body>, nonce: String) -> Result<Response
 
     type HmacSha256 = Hmac<Sha256>;
 
-    println!("nonce={}", nonce);
-
     let whole_body = hyper::body::aggregate(req).await?;
     
     // Decode as JSON...
@@ -76,7 +83,9 @@ async fn api_post_response(req: Request<Body>, nonce: String) -> Result<Response
 
     // FIXME: counter -> prevent reply attacks
 
-    println!("{}", data);
+    settings::router(data);
+
+    // settings_router(data);
 
     let json = serde_json::to_string(&data)?;
     let response = Response::builder()
@@ -99,8 +108,6 @@ async fn handle_request(
     let req_path = req.uri().path();
 
     if req.method() == &Method::POST {
-
-        println!("req_path={}", req_path);
 
         match req_path {
             "/api" => api_post_response(req, nonce).await,

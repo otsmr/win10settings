@@ -1,5 +1,7 @@
 mod webserver;
 mod webview;
+mod settings;
+
 use std::thread;
 use rand::{thread_rng, Rng};
 use rand::distributions::Alphanumeric;

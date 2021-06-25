@@ -43,6 +43,20 @@
 
 <b>Laden Sie die aktuellste Version von der <a href="https://win10settings.oproj.de/">Webseite</a> oder der <a href="https://github.com/otsmr/win10settings/releases">Releases-Seite</a> herunter.</b>
 
+# Installieren
+
+```powershell
+# cd frontend
+npm install
+npm build
+```
+
+```powershell
+# cd backend
+cargo build
+# cargo run
+```
+
 ## Sprachen
 
 ## Datenschutz
