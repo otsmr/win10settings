@@ -4,7 +4,7 @@
     "description": "Erweiterte Windows-Einstellungen",
     "author": "Tobias Müller",
     "main": "",
-    "homepage": "https://win10settings.oproj.de",
+    "homepage": "./",
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build"

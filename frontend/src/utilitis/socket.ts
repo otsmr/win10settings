@@ -20,7 +20,10 @@ const socket = {
         method: string,
         body?: object 
     }, callBack: {(error: boolean, data?: any): void}) {
-        
+
+        if ((window as any).location.href.indexOf("demo") > -1){
+            return callBack(true, "Backend nicht erreichbar.");
+        }
         
         const nonce = (window as any).location.hash.split("=")[1]
         

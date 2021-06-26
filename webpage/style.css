@@ -90,6 +90,13 @@ p {
 .btn.blue {
     background: #0078D4;
 }
+.btn.green {
+    background: #00B770;
+    max-width: 150px;
+}
+.btn.green span {
+    color: #fff;
+}
 .btn.blue span{
     color: #fff;
 }
