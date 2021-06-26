@@ -5,7 +5,7 @@ const appconfig = require("../utils/appconfig")
 const powershell = require("../utils/powershell");
 const {
     getManifestFromAppx,
-    getUsersThemeMode
+    getUserstheme
 } = require("../utils/powershell-utils");
 
 const configs = {
@@ -84,11 +84,11 @@ const loadWinApps = (isDarkMode, callBack) => {
 
 configs.get["winapps:appliste"] = (callBack) => {
     
-    const isDarkMode = appconfig.get("app:themeMode");
+    const isDarkMode = appconfig.get("app:theme");
 
     if (isDarkMode === "system") {
 
-        getUsersThemeMode((isDarkMode) => {
+        getUserstheme((isDarkMode) => {
             loadWinApps(isDarkMode, callBack);
         });
 

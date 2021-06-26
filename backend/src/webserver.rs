@@ -59,14 +59,13 @@ async fn api_post_response(req: Request<Body>, nonce: String) -> Result<Response
     
     // Decode as JSON...
     let raw_data: serde_json::Value = serde_json::from_reader(whole_body.reader())?;
-    let data = &raw_data["data"];
+    let verify_data: String = raw_data["data"].as_str().unwrap().to_string();
 
     // --- Validate HMAC ---
 
     let mut mac = HmacSha256::new_from_slice(nonce.as_bytes()).expect("HMAC can take key of any size");
-    let verify_data: String = raw_data["data"].to_string();
 
-    let verify_data = base64::encode(verify_data);
+    println!("{:?}", verify_data);
 
     mac.update(verify_data.as_bytes());
 
@@ -82,12 +81,14 @@ async fn api_post_response(req: Request<Body>, nonce: String) -> Result<Response
     // --- HMAC is valid ---
 
     // FIXME: counter -> prevent reply attacks
+    // let data = &base64::decode(verify_data).unwrap()[..];
 
-    settings::router(data);
+    let data = String::from_utf8(base64::decode(&verify_data).unwrap()).unwrap();
+    let data: serde_json::Value = serde_json::from_str(&data).unwrap();
 
-    // settings_router(data);
+    let result = settings::router(&data).unwrap();
 
-    let json = serde_json::to_string(&data)?;
+    let json = serde_json::to_string(&result)?;
     let response = Response::builder()
         .status(StatusCode::OK)
         .header(header::CONTENT_TYPE, "application/json")

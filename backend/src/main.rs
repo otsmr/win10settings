@@ -1,6 +1,8 @@
 mod webserver;
 mod webview;
 mod settings;
+mod config;
+
 
 use std::thread;
 use rand::{thread_rng, Rng};

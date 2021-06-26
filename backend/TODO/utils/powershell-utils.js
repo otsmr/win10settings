@@ -100,7 +100,7 @@ exports.getManifestFromAppx = (app, isDarkMode = false) => {
 
 }
 
-exports.getUsersThemeMode = (callBack) => {
+exports.getUserstheme = (callBack) => {
 
     powershell.getJson(`Get-ItemProperty -Path "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"`, [
         "AppsUseLightTheme"

@@ -29,13 +29,13 @@ configs.get["update:getVersion"] = (callBack) => {
 // ------------------------------------------------------------------
 
 
-configs.get["gereral:themeMode"] = (callBack) => {
-    callBack(false, appconfig.get("app:themeMode"));
+configs.get["gereral:theme"] = (callBack) => {
+    callBack(false, appconfig.get("app:theme"));
 }
-configs.set["gereral:themeMode"] = (value, callBack) => {
-    appconfig.set("app:themeMode", value);
-    socket.emit("setThemeMode", value);
-    configs.get["gereral:themeMode"](callBack);
+configs.set["gereral:theme"] = (value, callBack) => {
+    appconfig.set("app:theme", value);
+    socket.emit("settheme", value);
+    configs.get["gereral:theme"](callBack);
 }
 
 // ------------------------------------------------------------------

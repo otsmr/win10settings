@@ -6,7 +6,7 @@ import socket from "../../../../../utilitis/socket";
 
 export default function General () {
 
-    const optionsThemeMode = [
+    const optionstheme = [
         { title: "System", value: "system" },
         { title: "Dunkel", value: "dark" },
         { title: "Hell", value: "light" }
@@ -27,7 +27,7 @@ export default function General () {
             <button className="btn" onClick={()=>{socket.post({id: "openLogFolder", method: "open"}, _ => {})}}>Log-Ordner öffnen</button>
 
             <h2>Theme</h2>
-            <Select configID="app:gereral:themeMode" options={optionsThemeMode} />
+            <Select configID="app:gereral:theme" options={optionstheme} />
 
 
         </div>

@@ -16,6 +16,7 @@ import Translate from "../../utilitis/translate"
 import TableOfContent from "./tableofcontent";
 
 import socket from '../../utilitis/socket';
+import { syncThemeMode } from '../../utilitis/utils';
 
 const T = new Translate({}, {})
 
@@ -45,10 +46,8 @@ export default class Window extends React.Component<IProps, IState> {
 
         this.tableOfContent = new TableOfContent(T);
 
+        syncThemeMode();
         
-        // socket.on("setThemeMode", this.setThemeMode)
-        socket.post({id: "app:gereral:theme", method: "get"}, this.setThemeMode);
-
     }
 
     updateLanguage = (err: boolean, newLanguageCode: string) => {
@@ -58,7 +57,8 @@ export default class Window extends React.Component<IProps, IState> {
 
         if (languageCode !== newLanguageCode) {
             localStorage.setItem("languageCode", newLanguageCode);
-            (window as any).location.reload();
+            // TODO: reload
+            // (window as any).location.reload();
             return;
         }
 
@@ -68,20 +68,6 @@ export default class Window extends React.Component<IProps, IState> {
             case "en_US": languageData = en_US; break;
         }
         T.setLocalizationData(languageData, DefaultLocalization);
-
-    }
-
-
-    setThemeMode = (error: boolean, value: string) => {
-
-        const html: any = document.querySelector(":root");
-        let themeMode = value;
-
-        if (value === "system") {
-            themeMode = (window.matchMedia('(prefers-color-scheme: dark)').matches) ? "dark" : "light";
-        }
-
-        html?.setAttribute("theme", themeMode);
 
     }
 

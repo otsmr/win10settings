@@ -28,8 +28,7 @@ const socket = {
             counter: this.counter++,
             ...rawData
         }
-        const verify_data = btoa(JSON.stringify(data));
-        
+        const verify_data = btoa(JSON.stringify(data));        
         const hmac = sha256.sha256.hmac(nonce, verify_data);
         
         console.log("POST", {
@@ -46,17 +45,18 @@ const socket = {
             },
             body: JSON.stringify({
                 hmac,
-                data
+                data: verify_data
             })
         })
         .then(e => e.json())
         .then(res => {
             console.log("then", res);
-            // callBack(res.error, res.data)
+            console.log(res);
+            callBack(res.error, res.data);
         })
         .catch(e => {
             console.log("catch", e);
-            // callBack(true);
+            callBack(true);
         })
 
     },

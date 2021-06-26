@@ -3,6 +3,7 @@ import React from "react";
 import "../../../assets/style/forms/select.sass";
 
 import socket from "../../../utilitis/socket"
+import { syncThemeMode } from "../../../utilitis/utils";
 import Loader from "./../../design/loader";
 
 interface IProps {
@@ -42,9 +43,10 @@ export default class Select extends React.Component<IProps, IStats> {
 
         setTimeout(() => {
 
-            socket.post({id: this.props.configID, method: "set", body: { checked: this.state.selected} }, (err: boolean, value: string) => {
+            socket.post({id: this.props.configID, method: "set", body: { value: this.state.selected} }, (err: boolean, value: string) => {
 
                 if (err) return this.displayMessage(value);
+                syncThemeMode();
                 
                 this.setState({
                     selected: value,
