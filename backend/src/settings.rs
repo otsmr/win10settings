@@ -1,41 +1,31 @@
 
 use serde_json::json;
-use crate::config;
-
-
-struct App {}
-
-impl App {
-
-    fn setting_get_theme_mode () -> serde_json::Value {
-
-        let configs = config::get_config();
-        return json!(configs["theme"].as_str());
-    }
-
-    fn setting_set_theme_mode (mode: &str) {
-
-        let mut configs = config::get_config();
-
-        configs["theme"] = serde_json::Value::from(mode);
-
-        config::update_config(configs).unwrap();
-
-    }
-
-}
-
+use crate::config::{ ConfigWrapper };
+use crate::utils;
 
 pub fn router(data: &serde_json::Value) -> Result<serde_json::Value, String> {
 
-    println!("{}", data);
+    let id = data["id"].as_str().unwrap();
 
-    let id = data["id"].as_str().unwrap().to_string();
+
+    if data["method"] == "open" {
+
+        match id {
+            "href" => {
+                let href = data["body"]["url"].as_str().unwrap();
+                utils::open_webpage(href).unwrap();
+            },
+            _ => {}
+        }
+
+        return Ok(json!({}))
+
+    }
+
     let mut id = id.split(":");
 
-    // println!("{}", id.next().unwrap());
-
     let mut result = json!({});
+    
     let mut error = false; 
 
     match id.next().unwrap() {
@@ -44,43 +34,53 @@ pub fn router(data: &serde_json::Value) -> Result<serde_json::Value, String> {
 
             match id.next().unwrap() {
 
-                "gereral" => {
-                    
-                    
+                "env" => {
+
                     match id.next().unwrap() {
-
-                        "theme" => {
-
-                            if data["method"] == "set" {
-                                let body = data["body"]["value"].as_str().unwrap();
-                                App::setting_set_theme_mode(body);
-                            }
-                            
-                            result = App::setting_get_theme_mode();
-                            
+                        "isadmin" => {
+                            let isadmin = utils::is_running_as_admin().unwrap();
+                            result = json!(isadmin);
                         },
-                        _ => {
-                            error = true;
-                            println!("1. Einstellung nicht gefunden")
-                        }
+                        "version" => {
+                            result = json!(env!("CARGO_PKG_VERSION"));
+                        },
+                        _ => { error = true; }
+                    }
+
+                },
+
+                "config" => {
+
+                    let current_id = id.next().unwrap();
+                    match current_id {
+
+                        "language" | "theme" => {
+                            if data["method"] == "set" {
+                                ConfigWrapper::set_config_string(current_id, data["body"]["value"].as_str().unwrap());
+                            }
+                            result = ConfigWrapper::get_config_string(current_id);
+                        },
+                        "auto_update_check" | "winapps_filter_systemapps" => {
+                            if data["method"] == "set" {
+                                ConfigWrapper::set_config_bool(current_id, data["body"]["checked"].as_bool().unwrap());
+                            }
+                            result = ConfigWrapper::get_config_bool(current_id);
+                        },
+                        _ => { error = true; }
 
                     }
 
-
-
                 },
-                _ => {
-                    error = true;
-                    println!("2. Einstellung nicht gefunden")
-                }
+                _ => { error = true; }
             }
 
         },
-        _ => { 
-            error = true;
-            println!("3. Einstellung nicht gefunden");
-        }
+        _ => { error = true; }
 
+    }
+
+    if error {
+        println!("NOT FOUND: {:?}", data);
     }
 
     Ok(json!({

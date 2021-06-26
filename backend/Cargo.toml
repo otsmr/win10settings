@@ -18,3 +18,5 @@ rand = "0.8.4"
 hex = "0.4"
 dirs = "3.0"
 base64 = "0.13.0"
+widestring = "0.4.3"
+winapi = { version = "0.3.6", features = ["combaseapi", "objbase", "shellapi", "winerror"] }

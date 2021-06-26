@@ -20,14 +20,14 @@ export default function General () {
         <div>
 
             <h2>Sprache</h2>
-            <Select configID="app:gereral:language" options={optionsLanguages} />
+            <Select configID="app:config:language" options={optionsLanguages} />
             
             <h2>Logs</h2>
-            <p> Jede Einstellung, die von diesem Programm geändert wird, wird automatisch protokolliert. Alle Protokolle sind unter <b>%appdata%/win10settings/userData/logs</b> zu finden. Die wichtigste Protokolldatei ist die Datei "powershell.log" bzw. "error-powershell.log". Hier wird jeder Powershell-Befehl mit zusätzlichen Informationen protokolliert. </p>
-            <button className="btn" onClick={()=>{socket.post({id: "openLogFolder", method: "open"}, _ => {})}}>Log-Ordner öffnen</button>
+            <p> Jede Einstellung, die von diesem Programm geändert wird, wird automatisch protokolliert. Alle Protokolle sind unter <b>%appdata%/win10settings/</b> zu finden.</p>
+            <button className="btn" onClick={()=>{socket.post({id: "open_log_folder", method: "open"}, _ => {})}}>Log-Ordner öffnen</button>
 
             <h2>Theme</h2>
-            <Select configID="app:gereral:theme" options={optionstheme} />
+            <Select configID="app:config:theme" options={optionstheme} />
 
 
         </div>

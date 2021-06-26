@@ -64,9 +64,7 @@ async fn api_post_response(req: Request<Body>, nonce: String) -> Result<Response
     // --- Validate HMAC ---
 
     let mut mac = HmacSha256::new_from_slice(nonce.as_bytes()).expect("HMAC can take key of any size");
-
-    println!("{:?}", verify_data);
-
+    
     mac.update(verify_data.as_bytes());
 
     let hmac = mac.finalize().into_bytes();

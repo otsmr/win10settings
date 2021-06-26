@@ -88,7 +88,7 @@ export default class WinApps extends React.Component<IProps, IState> {
             <div>
                 <h2>Optionen</h2>
                 <label>Diese Liste filtern</label>
-                <Toggle configID="app:configs:programs:winapps:filderWinApps" onChange={this.updateList} />
+                <Toggle configID="app:config:winapps_filter_systemapps" onChange={this.updateList} />
 
                 <h2>Appliste</h2>
                 <button className="btn" onClick={this.startToRemoveApps} disabled={this.state.isLoading}>{this.state.btnText}</button>

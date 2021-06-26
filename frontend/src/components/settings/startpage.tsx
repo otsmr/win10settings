@@ -64,7 +64,7 @@ export default class Startpage extends React.Component<IProps, IState> {
 
     componentDidMount () {
 
-        socket.post({id: "app:electron:isadmin", method: "get"}, (err: boolean, isAdmin: boolean) => {
+        socket.post({id: "app:env:isadmin", method: "get"}, (err: boolean, isAdmin: boolean) => {
             if (err) return;
             this.setState({ isAdmin })
         })

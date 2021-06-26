@@ -24,8 +24,12 @@ fn init_config () {
     if !path.exists() {
 
         let default_config = json!({
-            "theme": "system"
+            "theme": "system",
+            "language": "de_DE",
+            "auto_update_check": false,
+            "winapps_filter_systemapps": true
         });
+
         let default_config = default_config.to_string();
 
         let mut file = File::create(path.clone()).unwrap();
@@ -35,7 +39,7 @@ fn init_config () {
 
 }
 
-pub fn get_config () -> serde_json::Value {
+fn get_config () -> serde_json::Value {
 
     init_config();
     let path = get_config_path();
@@ -46,7 +50,7 @@ pub fn get_config () -> serde_json::Value {
 
 }
 
-pub fn update_config (new_config: serde_json::Value) -> Result<(), ()> {
+fn update_config (new_config: serde_json::Value) -> Result<(), ()> {
 
     init_config();
     let path = get_config_path();
@@ -63,5 +67,39 @@ pub fn update_config (new_config: serde_json::Value) -> Result<(), ()> {
     buffer.write_all(json.as_bytes()).unwrap();
 
     Ok(())
+
+}
+
+pub struct ConfigWrapper {}
+
+impl ConfigWrapper {
+
+    pub fn get_config_bool (configid: &str) -> serde_json::Value {
+
+        let configs = get_config();
+        return json!(configs[configid].as_bool());
+    }
+
+    pub fn set_config_bool (configid: &str, new_value: bool) {
+
+        let mut configs = get_config();
+        configs[configid] = serde_json::Value::from(new_value);
+        update_config(configs).unwrap();
+
+    }
+
+    pub fn get_config_string (configid: &str) -> serde_json::Value {
+
+        let configs = get_config();
+        return json!(configs[configid].as_str());
+    }
+
+    pub fn set_config_string (configid: &str, mode: &str) {
+
+        let mut configs = get_config();
+        configs[configid] = serde_json::Value::from(mode);
+        update_config(configs).unwrap();
+
+    }
 
 }

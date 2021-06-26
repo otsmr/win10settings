@@ -54,10 +54,10 @@ export default class Update extends React.Component<IProps, IState> {
 
     componentDidMount () {
 
-        socket.post({id: "app:update:getVersion", method: "get"}, (err: boolean, version: string) => {
+        socket.post({id: "app:env:version", method: "get"}, (err: boolean, version: string) => {
             if (err) return console.error(version);
             this.setState({
-                version
+                version: "v" + version
             })
             this.checkForNewUpdates();
         });
@@ -90,7 +90,7 @@ export default class Update extends React.Component<IProps, IState> {
                 
                 <h2>Automatisch nach Updates suchen</h2>
                 <p> Bei jedem Start wird über Github geprüft, ob eine neue Version verfügbar ist. Wenn es eine neue Version gibt, erhalten Sie eine Benachrichtigung. </p>
-                <Toggle configID="app:update:automaticallyCheckForUpdates" offText="Aus" onText="An" />
+                <Toggle configID="app:config:auto_update_check" offText="Aus" onText="An" />
                 <A href="https://github.com/otsmr/win10settings/releases">Release Seite öffnen</A>
                 
             </div>

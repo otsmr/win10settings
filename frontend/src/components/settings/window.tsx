@@ -38,7 +38,7 @@ export default class Window extends React.Component<IProps, IState> {
             languageCode: "de_DE",
             activePageID: "startpage"
         }
-        socket.post({id: "app:gereral:language", method: "get", }, this.updateLanguage);
+        socket.post({id: "app:config:language", method: "get", }, this.updateLanguage);
         // socket.on("changeLanguage", this.updateLanguage);
         
         let languageCode: string = localStorage.getItem("languageCode") || "de_DE";
