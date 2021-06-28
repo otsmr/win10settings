@@ -57,6 +57,13 @@ cargo build
 # cargo run
 ```
 
+## Komandozeile
+
+```powershell
+.\target\debug\win10setting.exe c "{'id':'privacy:telemetrie:allowtelemetry','method':'get'}"
+.\target\debug\win10setting.exe c "{'id':'privacy:telemetrie:allowtelemetry','method':'set','body':{'checked':false}}"
+```
+
 ## Sprachen
 
 ## Datenschutz

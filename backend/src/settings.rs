@@ -2,6 +2,23 @@
 use serde_json::json;
 use crate::config::{ ConfigWrapper };
 use crate::utils;
+use runas::Command;
+
+
+pub enum ExecutionErrors {
+    None,
+    Unknown,
+    NotDefined,
+    PermissionDenied
+}
+
+impl PartialEq for ExecutionErrors {
+    fn eq(&self, other: &Self) -> bool {
+        self == other
+    }
+}
+
+mod privacy;
 
 pub fn router(data: &serde_json::Value) -> Result<serde_json::Value, String> {
 
@@ -26,9 +43,48 @@ pub fn router(data: &serde_json::Value) -> Result<serde_json::Value, String> {
 
     let mut result = json!({});
     
-    let mut error = false; 
+    let mut error = ExecutionErrors::None; 
 
     match id.next().unwrap() {
+
+        "privacy" => {
+
+            match id.next().unwrap() {
+                "telemetrie" => {
+
+
+                    match id.next().unwrap() {
+                        "allowtelemetry" => {
+
+                            if data["method"] == "set" {
+                                let enable =  data["body"]["checked"].as_bool().unwrap();
+
+                                match privacy::telemetrie::set_allow_telemetry(enable) {
+                                    Ok(_) => {},
+                                    Err(e) => {
+                                        error = e;
+                                    } 
+                                }
+
+                            }
+
+                            match privacy::telemetrie::get_allow_telemetry() {
+                                Ok(enabled) => {
+                                    result = json!(enabled);
+                                },
+                                Err(_e) => { error = ExecutionErrors::NotDefined; }
+                            }
+
+                        },
+                        _ => { error = ExecutionErrors::NotDefined; }
+                    }
+
+                    
+                },
+                _ => { error = ExecutionErrors::NotDefined; }
+            }
+
+        },
 
         "app" => {
 
@@ -44,7 +100,7 @@ pub fn router(data: &serde_json::Value) -> Result<serde_json::Value, String> {
                         "version" => {
                             result = json!(env!("CARGO_PKG_VERSION"));
                         },
-                        _ => { error = true; }
+                        _ => { error = ExecutionErrors::NotDefined; }
                     }
 
                 },
@@ -66,25 +122,55 @@ pub fn router(data: &serde_json::Value) -> Result<serde_json::Value, String> {
                             }
                             result = ConfigWrapper::get_config_bool(current_id);
                         },
-                        _ => { error = true; }
+                        _ => { error = ExecutionErrors::NotDefined; }
 
                     }
 
                 },
-                _ => { error = true; }
+                _ => { error = ExecutionErrors::NotDefined; }
             }
 
         },
-        _ => { error = true; }
+        _ => { error = ExecutionErrors::NotDefined; }
 
     }
 
-    if error {
-        println!("NOT FOUND: {:?}", data);
+    let mut result_error = true;
+
+    match error {
+        ExecutionErrors::None => {
+            result_error = false;
+        },
+        ExecutionErrors::NotDefined => {
+            result_error = true;
+            println!("NOT FOUND: {:?}", data);
+        }
+        ExecutionErrors::PermissionDenied => {
+            result_error = true;
+            println!("PermissionDenied {:?}", data);
+
+            if utils::is_running_as_admin().unwrap() == false {
+
+                let status = Command::new(std::env::current_exe().unwrap())
+                    .arg("c")
+                    .arg(data.to_string())
+                    .status()
+                    .expect("failed to execute");
+
+                println!("[status]={}", status);
+
+            }
+
+            
+
+        },
+        _ => {
+            // result_error = true;
+        }
     }
 
     Ok(json!({
-        "error": error,
+        "error": result_error,
         "data": result
     }))
 

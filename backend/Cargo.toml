@@ -19,4 +19,6 @@ hex = "0.4"
 dirs = "3.0"
 base64 = "0.13.0"
 widestring = "0.4.3"
-winapi = { version = "0.3.6", features = ["combaseapi", "objbase", "shellapi", "winerror"] }
+winapi = { version = "0.3.6", features = ["combaseapi", "objbase", "shellapi", "winerror", "securitybaseapi", "processthreadsapi"] }
+winreg = "0.9.0"
+runas = "0.2.1"
