@@ -6,3 +6,4 @@ TODO
     https://crates.io/crates/deelevate
 
 DNS-Proxy -> https://github.com/wyhaya/updns
+DNS-over-TLS -> https://crates.io/crates/trust-dns-resolver
