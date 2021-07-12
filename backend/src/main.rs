@@ -3,6 +3,7 @@ mod webview;
 mod settings;
 mod utils;
 mod config;
+mod regutils;
 
 use std::{time};
 
@@ -19,17 +20,13 @@ fn main() {
 
     if agrs.next() == Some(String::from("c")) {
 
-        println!("is_admin={}", utils::is_running_as_admin().unwrap());
-
         let data = agrs.next().unwrap();
         let data = data.replace("'", "\"");
         
         let data: serde_json::Value = serde_json::from_str(&data).unwrap();
-        let result = settings::router(&data).unwrap();
+        let result = settings::router(&data, true).unwrap();
 
         print!("{}", result.to_string());
-
-        thread::sleep(time::Duration::from_millis(10000000));
 
         return
 

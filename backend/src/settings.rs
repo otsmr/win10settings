@@ -3,6 +3,7 @@ use serde_json::json;
 use crate::config::{ ConfigWrapper };
 use crate::utils;
 use runas::Command;
+use std::io;
 
 
 pub enum ExecutionErrors {
@@ -20,11 +21,9 @@ impl PartialEq for ExecutionErrors {
 
 mod privacy;
 
-pub fn router(data: &serde_json::Value) -> Result<serde_json::Value, String> {
+pub fn router(data: &serde_json::Value, viacommandline: bool) -> Result<serde_json::Value, String> {
 
     let id = data["id"].as_str().unwrap();
-
-
     if data["method"] == "open" {
 
         match id {
@@ -49,37 +48,65 @@ pub fn router(data: &serde_json::Value) -> Result<serde_json::Value, String> {
 
         "privacy" => {
 
+            let mut enable = false;
+            if data["method"] == "set" {
+                enable =  data["body"]["checked"].as_bool().unwrap();
+            }
+
             match id.next().unwrap() {
                 "telemetrie" => {
 
+                    let mut get: io::Result<bool> = Ok(false);
 
                     match id.next().unwrap() {
+
+                        "requestFeedback" => {
+
+                            if data["method"] == "set" {
+                                match privacy::telemetrie::disable_request_feedback() {
+                                    Ok(_) => {},
+                                    Err(e) => { error = e; } 
+                                }
+                            }
+
+                            get = privacy::telemetrie::get_request_feedback();
+                            
+                        }
+                        "basicPrivacySettings" => {
+
+                            // if data["method"] == "set" {
+                            //     match privacy::telemetrie::disable_request_feedback() {
+                            //         Ok(_) => {},
+                            //         Err(e) => { error = e; } 
+                            //     }
+                            // }
+
+                            get = privacy::telemetrie::get_basic_privacy_settings();
+
+                        }
+                        "lockDomainsWithHosts" => {
+
+                        }
+
                         "allowtelemetry" => {
 
                             if data["method"] == "set" {
-                                let enable =  data["body"]["checked"].as_bool().unwrap();
-
                                 match privacy::telemetrie::set_allow_telemetry(enable) {
                                     Ok(_) => {},
-                                    Err(e) => {
-                                        error = e;
-                                    } 
+                                    Err(e) => { error = e; } 
                                 }
-
                             }
-
-                            match privacy::telemetrie::get_allow_telemetry() {
-                                Ok(enabled) => {
-                                    result = json!(enabled);
-                                },
-                                Err(_e) => { error = ExecutionErrors::NotDefined; }
-                            }
+                            get = privacy::telemetrie::get_allow_telemetry();
 
                         },
                         _ => { error = ExecutionErrors::NotDefined; }
                     }
 
-                    
+                    match get {
+                        Ok(enabled) => { result = json!(enabled); },
+                        Err(_) => { error = ExecutionErrors::NotDefined; }
+                    }
+
                 },
                 _ => { error = ExecutionErrors::NotDefined; }
             }
@@ -149,7 +176,7 @@ pub fn router(data: &serde_json::Value) -> Result<serde_json::Value, String> {
             result_error = true;
             println!("PermissionDenied {:?}", data);
 
-            if utils::is_running_as_admin().unwrap() == false {
+            if !viacommandline && utils::is_running_as_admin().unwrap() == false {
 
                 let status = Command::new(std::env::current_exe().unwrap())
                     .arg("c")
@@ -157,11 +184,15 @@ pub fn router(data: &serde_json::Value) -> Result<serde_json::Value, String> {
                     .status()
                     .expect("failed to execute");
 
-                println!("[status]={}", status);
+                if data["method"] == "set" {
+
+                    let mut c = data.clone();
+                    c["method"] = serde_json::to_value("get").unwrap();
+                    return router(&c, false)
+
+                }
 
             }
-
-            
 
         },
         _ => {

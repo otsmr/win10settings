@@ -84,7 +84,7 @@ async fn api_post_response(req: Request<Body>, nonce: String) -> Result<Response
     let data = String::from_utf8(base64::decode(&verify_data).unwrap()).unwrap();
     let data: serde_json::Value = serde_json::from_str(&data).unwrap();
 
-    let result = settings::router(&data).unwrap();
+    let result = settings::router(&data, false).unwrap();
 
     let json = serde_json::to_string(&result)?;
     let response = Response::builder()
