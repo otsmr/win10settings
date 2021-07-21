@@ -20,7 +20,7 @@
     <br>
 </p>
 
-<img src="public/img/startpage.png" alt="Platform">
+<img src="frontend/public/img/startpage.png" alt="Platform">
 
 # Inhaltsverzeichnis
 * <a href="#features">Features</a>
