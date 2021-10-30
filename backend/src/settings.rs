@@ -20,6 +20,7 @@ impl PartialEq for ExecutionErrors {
 }
 
 mod privacy;
+mod explorer;
 
 pub fn router(data: &serde_json::Value, viacommandline: bool) -> Result<serde_json::Value, String> {
 
@@ -111,6 +112,41 @@ pub fn router(data: &serde_json::Value, viacommandline: bool) -> Result<serde_js
                 _ => { error = ExecutionErrors::NotDefined; }
             }
 
+        },
+
+        "explorer" => {
+            match id.next().unwrap() {
+                "shortcuts" => {
+                    match id.next().unwrap() {
+                        "thispc" => {
+                            if data["method"] == "set" {
+                                // match privacy::telemetrie::disable_request_feedback() {
+                                //     Ok(_) => {},
+                                //     Err(e) => { error = e; } 
+                                // }
+                            }
+                            explorer::shortcuts::get_thispc();
+                            // get = privacy::telemetrie::get_request_feedback();
+                        },
+                        "programFolders" => {
+
+                        },
+                        _ => { error = ExecutionErrors::NotDefined; }
+                    }
+                },
+                "folderoptions" => {
+                    match id.next().unwrap() {
+                        "fileextensions" => {
+
+                        },
+                        "openwith" => {
+
+                        },
+                        _ => { error = ExecutionErrors::NotDefined; }
+                    }
+                },
+                _ => { error = ExecutionErrors::NotDefined; }
+            }
         },
 
         "app" => {

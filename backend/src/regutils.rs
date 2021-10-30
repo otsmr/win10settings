@@ -41,3 +41,6 @@ pub fn modify (hkey: HKEY, subkey: &str, key: &str, value: u32) -> Result<bool, 
 pub fn get_hkcu () -> winreg::RegKey {
     RegKey::predef(HKEY_LOCAL_MACHINE)
 }
+pub fn get_hklm () -> winreg::RegKey {
+    RegKey::predef(HKEY_LOCAL_MACHINE)
+}
